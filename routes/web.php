@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\ViewController
+use App\Http\Controllers\ViewController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -27,3 +27,4 @@ Route::middleware([
 
 Route::get('/', [ViewController::class, 'showHome'])->name('home');
 Route::get('/Shop', [ViewController::class, 'showShop'])->name('shop');
+Route::get('/About', [ViewController::class, 'showAbout'])->name('about');
