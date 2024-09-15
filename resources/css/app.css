@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] {
+/* [x-cloak] {
     display: none;
+} */
+@layer utilities {
+    .font-inter {
+        font-family: "Inter", sans-serif;
+        font-optical-sizing: auto;
+    }
+
+    .font-montserrat {
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+    }
+
+    .font-poppins {
+        font-family: "Poppins", sans-serif;
+        font-optical-sizing: auto;
+    }
+
+    .flex {
+        flex-wrap: wrap;
+    }
 }
