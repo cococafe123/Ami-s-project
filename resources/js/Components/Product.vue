@@ -1,9 +1,9 @@
 <template>
-    <button
+    <Link
         class="relative w-[276px]"
         @mouseover="over = true"
         @mouseout="over = false"
-        @click="console.log('test:out')"
+        :href="route('detail', { id: 1 })"
     >
         <div class="hover flex flex-col gap-2">
             <img :src="asset(product.img)" />
@@ -86,12 +86,13 @@
                 </div>
             </div>
         </div>
-    </button>
+    </Link>
 </template>
 
 <script lang="ts" setup>
 import asset from "@/asset";
 import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     product: { type: null },

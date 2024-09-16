@@ -1,6 +1,7 @@
 <template>
+    <div class="h-[1px] w-full bg-black opacity-15" />
     <div class="flex w-full max-w-[1440px] flex-col gap-6 px-[100px] py-[50px]">
-        <div class="flex flex-row justify-between">
+        <div class="flex flex-row justify-between gap-6">
             <div class="flex flex-col gap-10">
                 <div class="text-2xl font-medium text-black">CakeShop</div>
                 <div class="flex flex-col gap-1">
@@ -13,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col justify-start gap-10">
+            <div class="flex flex-col justify-start gap-6 md:gap-10">
                 <div class="w-full">
                     <button class="text-base text-[#9f9f9f]">新聞及時報</button>
                 </div>

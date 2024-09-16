@@ -27,4 +27,5 @@ Route::middleware([
 
 Route::get('/', [ViewController::class, 'showHome'])->name('home');
 Route::get('/Shop', [ViewController::class, 'showShop'])->name('shop');
+Route::get('/Shop/{id}', [ViewController::class, 'showDetail'])->name('detail');
 Route::get('/About', [ViewController::class, 'showAbout'])->name('about');

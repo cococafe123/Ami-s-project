@@ -27,5 +27,12 @@ class ViewController extends Controller
 
         ]);
     }
+
+    public function showDetail( $id )
+    {
+        return Inertia::render('Detail/Edit', [
+            
+        ]);
+    }
     //
 }

@@ -8,12 +8,12 @@
                 CakeShop
             </div>
         </div>
-        <div class="flex flex-row gap-[79px]">
+        <div class="hidden flex-row gap-[79px] md:flex">
             <Link :href="route('home')" class="self-center">首頁</Link>
             <Link :href="route('shop')" class="self-center">商店</Link>
             <Link :href="route('about')" class="self-center">關於我們</Link>
         </div>
-        <div class="flex flex-row gap-[45px]">
+        <div class="flex flex-row content-center gap-[45px]">
             <button>
                 <img :src="asset('element-account.svg')" />
             </button>
@@ -22,6 +22,11 @@
             </button>
             <button>
                 <img :src="asset('element-shopping-cart.svg')" />
+            </button>
+            <button class="flex size-6 flex-col justify-around md:hidden">
+                <div class="h-1 w-full rounded bg-black" />
+                <div class="h-1 w-full rounded bg-black" />
+                <div class="h-1 w-full rounded bg-black" />
             </button>
         </div>
     </div>
