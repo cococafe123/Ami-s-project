@@ -3,7 +3,7 @@
         <!-- 主視圖 -->
         <MainView />
         <!-- 本月主打 -->
-        <div class="w-full max-w-[1440px] px-10 py-20 sm:px-20 lg:px-[120px]">
+        <div class="padding-items w-full max-w-[1440px] py-20">
             <div
                 class="font-poppins w-full text-center text-[40px] font-bold leading-[48px] text-[#3A3A3A]"
             >
@@ -20,4 +20,9 @@
 import { BrandImage, MonthSelling, MainView } from "./Partials";
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.padding-items {
+    padding-left: min(120px, 5vw);
+    padding-right: min(120px, 5vw);
+}
+</style>

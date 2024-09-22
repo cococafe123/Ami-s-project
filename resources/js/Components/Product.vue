@@ -1,5 +1,6 @@
 <template>
     <Link
+        v-if="product"
         class="relative w-[276px]"
         @mouseover="over = true"
         @mouseout="over = false"
@@ -49,10 +50,12 @@
                 class="flex size-full flex-col content-center justify-center gap-6"
             >
                 <button
-                    class="w-[200px] rounded-lg bg-white py-3"
+                    class="w-[200px] rounded-xl bg-white py-3"
                     @click.stop="console.log('test:in')"
                 >
-                    <div class="font-poppins text-base text-[#b88e2f]">
+                    <div
+                        class="font-poppins text-base font-semibold text-[#b88e2f]"
+                    >
                         新增到購物車
                     </div>
                 </button>
@@ -87,6 +90,7 @@
             </div>
         </div>
     </Link>
+    <div v-else class="w-[276px]" />
 </template>
 
 <script lang="ts" setup>

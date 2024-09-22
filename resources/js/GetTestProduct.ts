@@ -1,4 +1,4 @@
-interface productType {
+export interface productType {
     img: string;
     name: string;
     type: string;

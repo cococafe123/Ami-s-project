@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex w-full max-w-[1440px] flex-row gap-3 bg-[#F9F1E7] px-[100px] py-9"
+        class="flex w-full max-w-[1440px] flex-row justify-center gap-3 px-4 py-9 lg:justify-start lg:px-[100px]"
     >
         <Link :href="route('home')" class="self-center text-[#9F9F9F]">
             首頁

@@ -9,9 +9,11 @@
         </button>
         <!-- first page -->
         <button
-            class="size-[60px] self-center rounded-lg bg-[#F9F1E7] px-2 py-2 text-black"
+            class="size-[60px] self-center rounded-lg px-2 py-2 text-black"
             :disabled="currentPage === 1"
-            :class="{ 'bg-[#B88E2F] text-white': currentPage === 1 }"
+            :class="
+                currentPage === 1 ? 'bg-[#B88E2F] text-white' : 'bg-[#F9F1E7]'
+            "
             @click="currentPage = 1"
         >
             1
@@ -26,9 +28,10 @@
         </div>
         <button
             v-for="(page, index) in pages - 2"
-            class="size-[60px] self-center rounded-lg bg-[#F9F1E7] px-2 py-2 text-black"
+            class="size-[60px] self-center rounded-lg px-2 py-2 text-black"
             :class="{
                 hidden: currentPage > page + 2 || currentPage < page - 0,
+                'bg-[#F9F1E7]': currentPage !== page + 1,
                 'bg-[#B88E2F] text-white': currentPage === page + 1,
             }"
             @click="currentPage = page + 1"
@@ -45,10 +48,11 @@
         </div>
         <!-- last Page -->
         <button
-            class="size-[60px] self-center rounded-lg bg-[#F9F1E7] px-2 py-2 text-black"
+            class="size-[60px] self-center rounded-lg px-2 py-2 text-black"
             :class="{
                 hidden: pages === 1,
                 'bg-[#B88E2F] text-white': currentPage === pages,
+                'bg-[#F9F1E7]': currentPage !== pages,
             }"
             @click="currentPage = pages"
         >
@@ -71,5 +75,5 @@ const props = defineProps({
     pages: { type: Number },
 });
 
-const currentPage = defineModel();
+const currentPage: any = defineModel();
 </script>
