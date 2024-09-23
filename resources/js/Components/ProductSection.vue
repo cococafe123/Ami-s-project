@@ -65,13 +65,11 @@ const resize = () => {
 
 onMounted(() => {
     resize();
-    console.log(productArray);
     window.addEventListener("resize", resize);
 });
 
 onUnmounted(() => {
     window.removeEventListener("resize", resize);
-    console.log("b");
 });
 
 onUpdated(() => {

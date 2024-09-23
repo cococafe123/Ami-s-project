@@ -21,6 +21,14 @@
         font-optical-sizing: auto;
     }
 
+    .font-bri{
+        font-family: "Bricolage Grotesque", sans-serif;
+    }
+
+    .font-bigshot{
+        font-family: "Bigshot One", serif;
+    }
+
     .flex {
         flex-wrap: wrap;
     }
