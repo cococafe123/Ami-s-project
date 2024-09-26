@@ -6,7 +6,7 @@
         />
         <div class="absolute left-0 top-0 flex h-[674px] w-full justify-center">
             <div
-                class="flex w-full max-w-[1440px] flex-col justify-center gap-4 pl-[60px] lg:pl-[170px]"
+                class="flex w-full max-w-[1440px] flex-col justify-center gap-4 pl-5 sm:pl-[60px] lg:pl-[170px]"
             >
                 <div
                     class="font-bri text-4xl font-bold text-[#e9e9f0] lg:text-[64px]"

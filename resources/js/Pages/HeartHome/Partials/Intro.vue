@@ -34,7 +34,7 @@
             </div>
             <div class="flex flex-row justify-center gap-6">
                 <div
-                    class="w-[300px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 sm:w-[230px] md:flex-1"
+                    class="min-w-[230px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 md:flex-1"
                 >
                     <div class="flex flex-row content-between pb-4">
                         <div class="relative flex-1 font-medium text-[#ebf4fb]">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-[300px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 sm:w-[230px] md:flex-1"
+                    class="min-w-[230px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 md:flex-1"
                 >
                     <div class="flex flex-row content-between pb-4">
                         <div class="relative flex-1 font-medium text-[#ebf4fb]">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div
-                    class="w-[300px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 sm:w-[230px] md:flex-1"
+                    class="min-w-[230px] rounded-3xl bg-[#2F313266] px-8 pb-8 pt-6 md:flex-1"
                 >
                     <div class="flex flex-row content-between pb-4">
                         <div class="relative flex-1 font-medium text-[#ebf4fb]">
@@ -98,7 +98,7 @@
                 </div>
                 <!-- 假資料 -->
                 <div
-                    class="hidden rounded-3xl px-8 pb-8 pt-6 sm:block sm:w-[230px] md:hidden"
+                    class="hidden min-w-[230px] rounded-3xl px-8 pb-8 pt-6 sm:block sm:flex-1 xl:hidden"
                 ></div>
             </div>
         </div>
