@@ -39,6 +39,7 @@ interface card {
     like: Number;
     qrcode: String;
     url: String;
+    id: String;
 }
 
 interface col {
@@ -76,6 +77,7 @@ const testCard1: card = {
     like: 104,
     url: "",
     qrcode: "",
+    id: "1",
 };
 const testCard2: card = {
     img: "testImg2.png",
@@ -83,6 +85,7 @@ const testCard2: card = {
     like: 123,
     url: "",
     qrcode: "",
+    id: "2",
 };
 
 let currentIndex = 0;
