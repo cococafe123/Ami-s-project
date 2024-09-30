@@ -19,26 +19,36 @@
                 />
             </div>
         </div>
-        <button
+        <button class=""></button>
+        <label
+            for="add-card-img-input"
             class="button-shadow fixed bottom-12 right-6 rounded-full border border-[#E2E8F0] bg-[#F7F9FF] px-3 py-3"
+            type="button"
         >
             <Plus class="size-4" />
-        </button>
+        </label>
+        <input
+            ref="imgInput"
+            class="hidden"
+            type="file"
+            id="add-card-img-input"
+            accept="image/png, image/jpeg, image/gif"
+            @change="submit"
+        />
     </div>
 </template>
 <script lang="ts" setup>
 import { ref, render, h, onMounted } from "vue";
 import { Plus } from "lucide-vue-next";
+import { useForm } from "@inertiajs/vue3";
 
 import asset from "@/asset";
 import BusinessCard from "@/Components/BusinessCard.vue";
 
 interface card {
     img: String;
-    type: String;
     like: Number;
-    qrcode: String;
-    url: String;
+    QRCode: String;
     id: String;
 }
 
@@ -48,8 +58,17 @@ interface col {
     card: Array<card>;
 }
 
-const props = defineProps({});
+interface propsType {
+    card: Array<card>;
+}
 
+const props = defineProps<propsType>();
+
+const form = useForm({
+    img: "",
+});
+
+const imgInput = ref(null);
 const totalCardNum = ref(2400);
 const cardColNum = ref(0);
 const cardColInfo = ref([]);
@@ -73,52 +92,55 @@ const checkSize = () => {
 
 const testCard1: card = {
     img: "testImg1.png",
-    type: "normal",
     like: 104,
-    url: "",
-    qrcode: "",
+    QRCode: "",
     id: "1",
 };
 const testCard2: card = {
     img: "testImg2.png",
-    type: "high",
     like: 123,
-    url: "",
-    qrcode: "",
+    QRCode: "",
     id: "2",
 };
 
-let currentIndex = 0;
+let currentColIndex = -1;
+let currentCardIndex = 0;
 
 const getCard = () => {
     const getNextIndex = (): number => {
-        const nextIndex = () => {
-            currentIndex += 1;
-            if (currentIndex >= cardColInfo.value.length) {
-                currentIndex = 0;
-            }
-        };
-        //找下個
-        nextIndex();
-        //假設高度太高先跳過再找下個
-        while (cardColInfo.value[currentIndex].pass) {
-            console.log("true");
-            cardColInfo.value[currentIndex].pass = false;
-            nextIndex();
+        currentColIndex += 1;
+        if (currentColIndex >= cardColInfo.value.length) {
+            currentColIndex = 0;
         }
-        return currentIndex;
+        return currentColIndex;
     };
     //一次拿12張名片
 
     for (let i = 0; i < 12; i++) {
-        const cloneTestCard = Math.floor(Math.random() * 2)
-            ? testCard1
-            : testCard2;
-        cardColInfo.value[getNextIndex()].card.push(cloneTestCard);
-        if (cloneTestCard.type !== "normal") {
-            cardColInfo.value[currentIndex].pass = true;
+        // const cloneTestCard = Math.floor(Math.random() * 2)
+        //     ? testCard1
+        //     : testCard2;
+
+        if (currentCardIndex >= props.card.length) {
+            break;
         }
+
+        cardColInfo.value[getNextIndex()].card.push(
+            props.card[currentCardIndex],
+        );
+        currentCardIndex++;
     }
+};
+
+const submit = () => {
+    var files = imgInput.value.files;
+    form.img = files[0];
+    form.post(route("card.store"), {
+        onSuccess: () => {
+            form.reset();
+        },
+        errorBag: "addCard",
+    });
 };
 
 const init = () => {
@@ -131,7 +153,7 @@ const init = () => {
 init();
 
 setTimeout(() => {
-    getCard();
+    // getCard();
 }, 5000);
 </script>
 <style lang="scss" scoped>
