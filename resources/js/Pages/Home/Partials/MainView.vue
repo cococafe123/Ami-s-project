@@ -36,6 +36,10 @@
             @change="submit"
         />
     </div>
+    <!-- <Qrcode
+        :value="'https://codecity.com.tw'"
+        :image-settings="imageSettings"
+    ></Qrcode> -->
 </template>
 <script lang="ts" setup>
 import { ref, render, h, onMounted } from "vue";
@@ -44,6 +48,7 @@ import { useForm } from "@inertiajs/vue3";
 
 import asset from "@/asset";
 import BusinessCard from "@/Components/BusinessCard.vue";
+import Qrcode from "qrcode.vue";
 
 interface card {
     img: String;
@@ -155,6 +160,13 @@ init();
 setTimeout(() => {
     // getCard();
 }, 5000);
+
+const imageSettings = ref({
+    src: asset("CodeCity-logo.svg"),
+    width: 22.5,
+    height: 8,
+    excavate: true,
+});
 </script>
 <style lang="scss" scoped>
 .button-shadow {

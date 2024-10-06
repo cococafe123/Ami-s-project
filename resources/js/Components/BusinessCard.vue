@@ -1,7 +1,7 @@
 <template>
     <!-- <img v-if="type === 'normal'" :src="getImg(url)" />
     <img class="pb-[7px]" v-else :src="getImg(url)" /> -->
-    <button @click="deleteCard">
+    <button @click="">
         <img class="rounded-xl" :src="getImg(card.img)" />
     </button>
     <!-- <div v-if="type === 'normal'" class=" bg-black" />
@@ -29,9 +29,7 @@ const deleteCard = () => {
         _method: "delete",
     });
     deleteForm.post(route("card.destroy", props.card.id), {
-        onSuccess: () => {
-            console.log("delete");
-        },
+        onSuccess: () => {},
     });
 };
 </script>

@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->unsignedInteger('like')->default(value: 0);
-            $table->string('QRCode')->default('qrcode');
             $table->string('img');
             $table->softDeletes();
 
