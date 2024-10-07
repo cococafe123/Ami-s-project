@@ -1,11 +1,7 @@
 <template>
-    <!-- <img v-if="type === 'normal'" :src="getImg(url)" />
-    <img class="pb-[7px]" v-else :src="getImg(url)" /> -->
-    <button @click="">
+    <button @click="" class="w-fit">
         <img class="rounded-xl" :src="getImg(card.img)" />
     </button>
-    <!-- <div v-if="type === 'normal'" class=" bg-black" />
-    <div v-else class=" bg-white pb-[7px]" /> -->
 </template>
 <script lang="ts" setup>
 import getImg from "@/getImg";
@@ -14,7 +10,7 @@ import { useForm } from "@inertiajs/vue3";
 interface cardType {
     img: String;
     like: Number;
-    QRCode: String;
+    height: Number;
     id: String;
 }
 

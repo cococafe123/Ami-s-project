@@ -29,10 +29,13 @@ class CardController extends Controller
 
             if ($ratio > 1.1) {
                 $image->cover(256, 145);
+                $data['height'] = 145;
             } else if ($ratio < 1.1 && $ratio > 0.75) {
                 $image->cover(256, height: 307);
+                $data['height'] = 307;
             } else {
                 $image->cover(176, height: 288);
+                $data['height'] = 288;
             }
 
             $imageName = Str::random(10) . '.' . $data['img']->getClientOriginalExtension();

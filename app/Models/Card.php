@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     use HasFactory;
-    protected $fillable = ['img', 'like', 'QRCode'];
+    protected $fillable = ['img', 'like', 'height'];
 }

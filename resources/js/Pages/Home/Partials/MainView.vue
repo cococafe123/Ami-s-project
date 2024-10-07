@@ -8,24 +8,15 @@
                 共{{ totalCardNum }}張名片
             </div>
         </div>
-        <div class="flex w-full flex-row justify-around">
-            <div
-                v-for="(item, index) in cardColNum"
-                class="flex flex-col gap-6"
-            >
-                <BusinessCard
-                    v-for="card in cardColInfo[index].card"
-                    :card="card"
-                />
-            </div>
-        </div>
-        <button class=""></button>
         <label
             for="add-card-img-input"
-            class="button-shadow fixed bottom-12 right-6 rounded-full border border-[#E2E8F0] bg-[#F7F9FF] px-3 py-3"
+            class="button-shadow mb-6 block w-full rounded-lg border border-[#D9D9D9] bg-[#F7F9FF] px-3 py-3"
             type="button"
         >
-            <Plus class="size-4" />
+            <div class="flex w-full flex-row justify-center gap-2">
+                <Plus class="size-4" />
+                <div class="text-sm text-[#5a5a5a]">新增你的名片</div>
+            </div>
         </label>
         <input
             ref="imgInput"
@@ -35,6 +26,21 @@
             accept="image/png, image/jpeg, image/gif"
             @change="submit"
         />
+        <div class="flex w-full flex-row justify-around">
+            <div
+                v-for="(item, index) in cardColNum"
+                class="flex flex-col gap-6"
+                :class="{
+                    'items-center': cardColInfo.length === 1,
+                    'items-start': cardColInfo.length !== 1,
+                }"
+            >
+                <BusinessCard
+                    v-for="card in cardColInfo[index].card"
+                    :card="card"
+                />
+            </div>
+        </div>
     </div>
     <!-- <Qrcode
         :value="'https://codecity.com.tw'"
@@ -49,17 +55,18 @@ import { useForm } from "@inertiajs/vue3";
 import asset from "@/asset";
 import BusinessCard from "@/Components/BusinessCard.vue";
 import Qrcode from "qrcode.vue";
+import { get } from "@vueuse/core";
 
 interface card {
     img: String;
     like: Number;
-    QRCode: String;
+    height: Number;
     id: String;
 }
 
 interface col {
     num: Number;
-    pass: Boolean;
+    height: Number;
     card: Array<card>;
 }
 
@@ -90,38 +97,28 @@ const checkSize = () => {
         cardColNum.value = 1;
     }
     for (let i = 0; i < cardColNum.value; i++) {
-        const newCol: col = { num: 0, pass: false, card: [] };
+        const newCol: col = { num: 0, height: 0, card: [] };
         cardColInfo.value.push(newCol);
     }
 };
 
-const testCard1: card = {
-    img: "testImg1.png",
-    like: 104,
-    QRCode: "",
-    id: "1",
-};
-const testCard2: card = {
-    img: "testImg2.png",
-    like: 123,
-    QRCode: "",
-    id: "2",
-};
-
-let currentColIndex = -1;
 let currentCardIndex = 0;
 
-const getCard = () => {
+const getCard = (): void => {
+    //一次拿24張名片
     const getNextIndex = (): number => {
-        currentColIndex += 1;
-        if (currentColIndex >= cardColInfo.value.length) {
-            currentColIndex = 0;
+        let index = 0;
+        let minHeight = cardColInfo.value[index].height;
+        for (let i = 1; i < cardColInfo.value.length; i++) {
+            if (minHeight > cardColInfo.value[i].height) {
+                index = i;
+                minHeight = cardColInfo.value[index].height;
+            }
         }
-        return currentColIndex;
+        return index;
     };
-    //一次拿12張名片
 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 24; i++) {
         // const cloneTestCard = Math.floor(Math.random() * 2)
         //     ? testCard1
         //     : testCard2;
@@ -130,9 +127,13 @@ const getCard = () => {
             break;
         }
 
-        cardColInfo.value[getNextIndex()].card.push(
-            props.card[currentCardIndex],
-        );
+        let index = getNextIndex();
+
+        cardColInfo.value[index].card.push(props.card[currentCardIndex]);
+
+        cardColInfo.value[index].height += props.card[currentCardIndex].height;
+        cardColInfo.value[index].height += 24;
+
         currentCardIndex++;
     }
 };

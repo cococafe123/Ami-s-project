@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->unsignedInteger('like')->default(value: 0);
             $table->string('img');
+            $table->unsignedInteger('height')->default(value: 0);
             $table->softDeletes();
 
         });
