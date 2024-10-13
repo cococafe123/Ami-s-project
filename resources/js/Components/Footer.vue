@@ -1,8 +1,9 @@
 <template>
-    <div class="w-full border-t border-[#757575]" />
-    <div class="w-full py-8 flex flex-col gap-4 justify-center">
+    <div
+        class="flex w-full flex-col justify-center gap-4 border-t border-[#757575] py-8"
+    >
         <img :src="asset('CodeCity-logo.svg')" />
-        <div class="font-normal text-xs text-[#42474e] text-center">
+        <div class="text-center text-xs font-normal text-[#42474e]">
             © 2024 CodeCity Inc.
         </div>
     </div>

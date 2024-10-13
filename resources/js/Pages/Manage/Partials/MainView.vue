@@ -39,7 +39,7 @@
                     v-for="card in cardColInfo[index].card"
                     :card="card"
                     :flex="false"
-                    :manage="false"
+                    :manage="manage"
                 />
             </div>
         </div>

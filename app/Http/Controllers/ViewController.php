@@ -16,4 +16,23 @@ class ViewController extends Controller
             'card' => $Card,
         ]);
     }
+
+    public function showDetail($id)
+    {
+        $Card = Card::find($id);
+        // dd();
+        return Inertia::render('Detail/Show', [
+            'current' => $Card,
+        ]);
+    }
+
+    public function showManage()
+    {
+        $Card = Card::take(20)->get();
+        // dd();
+        return Inertia::render('Manage/Index', [
+            'card' => $Card,
+            'manage' => true,
+        ]);
+    }
 }

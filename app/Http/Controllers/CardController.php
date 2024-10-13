@@ -28,13 +28,13 @@ class CardController extends Controller
             $ratio = $image->width() / $image->height();
 
             if ($ratio > 1.1) {
-                $image->cover(256, 145);
+                $image->cover($image->width(), $image->width() * 145 / 256);
                 $data['height'] = 145;
             } else if ($ratio < 1.1 && $ratio > 0.75) {
-                $image->cover(256, height: 307);
+                $image->cover($image->width(), height: $image->width() * 307 / 256);
                 $data['height'] = 307;
             } else {
-                $image->cover(176, height: 288);
+                $image->cover($image->width(), height: $image->width() * 288 / 176);
                 $data['height'] = 288;
             }
 
@@ -51,7 +51,8 @@ class CardController extends Controller
         $card = Card::create($data);
 
         $card->save();
-        return Inertia::location(route('home'));
+        return to_route('home');
+
     }
 
     public function destroy($id)
@@ -62,6 +63,6 @@ class CardController extends Controller
         }
         $card->delete();
 
-        return Inertia::location(route('home'));
+        return to_route('manage');
     }
 }

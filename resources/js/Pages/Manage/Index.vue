@@ -1,7 +1,7 @@
 <template>
     <Frame>
         <div class="w-full max-w-[1440px]">
-            <MainView :card="card" />
+            <MainView :card="card" :manage="manage" />
         </div>
     </Frame>
 </template>
@@ -11,6 +11,7 @@ import { cardType } from "@/Interface/Card";
 
 interface propsType {
     card: Array<cardType>;
+    manage: Boolean;
 }
 
 const props = defineProps<propsType>();
