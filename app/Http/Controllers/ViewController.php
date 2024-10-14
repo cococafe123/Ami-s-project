@@ -10,10 +10,10 @@ class ViewController extends Controller
 {
     public function showHome()
     {
-        $Card = Card::take(20)->get();
+        $total = Card::count();
         // dd();
         return Inertia::render('Home/Index', [
-            'card' => $Card,
+            'totalCardNum' => $total,
         ]);
     }
 
@@ -28,11 +28,8 @@ class ViewController extends Controller
 
     public function showManage()
     {
-        $Card = Card::take(20)->get();
         // dd();
-        return Inertia::render('Manage/Index', [
-            'card' => $Card,
-            'manage' => true,
+        return Inertia::render('Manage/Index', ['totalCardNum' => $total,
         ]);
     }
 }

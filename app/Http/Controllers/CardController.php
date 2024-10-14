@@ -14,6 +14,7 @@ use Intervention\Image\Drivers\Imagick\Driver;
 
 class CardController extends Controller
 {
+
     public function store(AddCardRequest $request)
     {
 
@@ -64,5 +65,30 @@ class CardController extends Controller
         $card->delete();
 
         return to_route('manage');
+    }
+
+    public function index($request){
+        $validated = $request->validate([
+            'index'=>['unsignedInteger','required'],
+            'get'=>['unsignedInteger','required']
+        ]);
+
+        $cards = Card::skip($request->index)->take($request->get);
+
+        return responce()->json(['cards'=>$cards],200);
+    }
+
+    public function update($request,$id){
+        $card = Card::findOrFail($id);
+        $validated = $request->validate([
+            'like'=> ['required','boolean']
+        ]);
+        if($request->like){
+            $card['like']+=1;
+        }else{
+            $card[like]-=1;
+        }
+       
+        return response()->json(['card'=>$card],200);
     }
 }
