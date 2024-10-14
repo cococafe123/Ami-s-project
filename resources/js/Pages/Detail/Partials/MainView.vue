@@ -16,7 +16,7 @@
         </div>
         <div class="flex flex-col gap-7 p-5">
             <Qrcode
-                :value="'https://codecity.com.tw'"
+                :value="url"
                 :image-settings="imageSettings"
                 level="H"
                 :size="200"
@@ -30,7 +30,7 @@
                     <button
                         v-if="isNoneCopyClick"
                         class="flex flex-row items-center"
-                        @click="coptUrlClick"
+                        @click="copyUrlClick"
                     >
                         <Link class="size-4" />
                         <div class="pl-2 text-sm">複製連結</div>
@@ -46,6 +46,8 @@
                 </Transition>
             </div>
         </div>
+
+        <BusinessCardIndex ref="cardIndex" :manage="false" />
     </div>
 
     <div v-else class="w-full px-8 pb-6 pt-8 sm:pb-16 xl:px-[170px]">
@@ -100,9 +102,9 @@ import { Link as LinkUrl } from "@inertiajs/vue3";
 import Like from "@/Components/Like.vue";
 import Qrcode from "qrcode.vue";
 import asset from "@/asset";
+import BusinessCardIndex from "@/Components/BusinessCardIndex.vue";
 
 interface propsType {
-    card: Array<cardType>;
     current: cardType;
 }
 
@@ -117,8 +119,9 @@ const imageSettings = ref({
 
 const isNoneCopyClick = ref(true);
 const isAlreadyCopyClick = ref(false);
+const url = ref(window.location.href);
 
-const coptUrlClick = () => {
+const copyUrlClick = () => {
     const toggleNoneFalse = () => {
         isNoneCopyClick.value = false;
         setTimeout(() => {
@@ -143,7 +146,7 @@ const coptUrlClick = () => {
     };
 
     //copy url
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(url.value);
 
     toggleNoneFalse();
 };

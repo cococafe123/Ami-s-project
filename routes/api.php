@@ -9,5 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/api/cards',[CardController::class,'index']);
-Route::put('/api/card/{id}',[CardController::class,'like']);
+Route::get('/cards', [CardController::class, 'index']);
+Route::put('/card/{id}', [CardController::class, 'like']);

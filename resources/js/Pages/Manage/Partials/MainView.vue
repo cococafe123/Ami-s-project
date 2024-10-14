@@ -26,7 +26,7 @@
             accept="image/png, image/jpeg, image/gif"
             @change="submit"
         />
-        <BusinessCarcIndex :manage="true" />
+        <BusinessCardIndex ref="cardIndex" :manage="true" />
     </div>
 </template>
 <script lang="ts" setup>
@@ -36,7 +36,7 @@ import { useForm } from "@inertiajs/vue3";
 
 import asset from "@/asset";
 import { cardType } from "@/Interface/Card";
-import BusinessCarcIndex from "@/Components/BusinessCarcIndex.vue";
+import BusinessCardIndex from "@/Components/BusinessCardIndex.vue";
 
 interface propsType {
     totalCardNum: Number;
@@ -49,6 +49,7 @@ const form = useForm({
 });
 
 const imgInput = ref(null);
+const cardIndex = ref(null);
 
 const submit = () => {
     var files = imgInput.value.files;
@@ -56,6 +57,7 @@ const submit = () => {
     form.post(route("card.store"), {
         onSuccess: () => {
             form.reset();
+            // cardIndex.value.changeCardContent();
         },
         errorBag: "addCard",
     });

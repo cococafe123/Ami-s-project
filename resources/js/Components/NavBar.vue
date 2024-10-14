@@ -18,9 +18,11 @@
         >
             <Input
                 id="search"
+                v-model="id"
                 type="text"
                 placeholder="搜尋卡片 ID"
                 class="h-[48px] rounded-full pl-10"
+                @enter="submit"
             />
             <span
                 class="absolute inset-y-0 start-0 flex items-center justify-center px-2"
@@ -43,8 +45,10 @@
                 <div class="flex-1 pl-1 pr-4" ref="mobileInput">
                     <input
                         v-if="isSearchOpen"
+                        v-model="id"
                         class="w-full bg-[#f7f9ff] outline-none"
                         placeholder="搜尋卡片 ID"
+                        @keyup.enter="submit"
                     />
                 </div>
             </button>
@@ -56,11 +60,13 @@ import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 import { Input } from "./ui/input";
 import { Search, X } from "lucide-vue-next";
 import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
 
 import asset from "@/asset";
 
 const isSearchOpen = ref(false);
 const mobileInput = ref(null);
+const id = ref();
 
 const openMobileSearch = () => {
     isSearchOpen.value = true;
@@ -72,6 +78,7 @@ const openMobileSearch = () => {
 
     setTimeout(() => {
         if (mobileInput.value.children[0]) {
+            console.log(mobileInput.value.children[0], "in");
             mobileInput.value.children[0].focus();
         }
     }, 300);
@@ -79,6 +86,20 @@ const openMobileSearch = () => {
 
 const closeMobileSearch = () => {
     isSearchOpen.value = false;
+};
+
+const submit = () => {
+    console.log(id.value);
+
+    const form = useForm({
+        _method: "get",
+    });
+    form.get(route("detail", id.value), {
+        onSuccess: () => {
+            form.reset();
+        },
+        errorBag: "addCard",
+    });
 };
 </script>
 

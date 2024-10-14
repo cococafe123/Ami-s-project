@@ -1,10 +1,24 @@
 <template>
     <label class="like">
-        <input type="checkbox" />
+        <input :disabled="isLikeDisabled" type="checkbox" @click="click" />
         <div class="hearth" />
     </label>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from "vue";
+
+const isLikeDisabled = ref(false);
+
+const click = () => {
+    console.log("click");
+
+    isLikeDisabled.value = true;
+    //三秒內不能再按
+    setTimeout(() => {
+        isLikeDisabled.value = false;
+    }, 1000);
+};
+</script>
 <style lang="scss">
 :root {
     --size: 32px;

@@ -54,6 +54,8 @@ interface propsType {
 
 const props = defineProps<propsType>();
 
+const emit = defineEmits(["deleteCard"]);
+
 const deleteCard = () => {
     const deleteForm = useForm({
         _method: "delete",
@@ -61,6 +63,7 @@ const deleteCard = () => {
     deleteForm.post(route("card.destroy", props.card.id), {
         onSuccess: () => {
             console.log("delete");
+            emit("deleteCard");
         },
     });
 };

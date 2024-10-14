@@ -13,15 +13,17 @@
                 :card="card"
                 :flex="false"
                 :manage="manage"
+                @deleteCard="changeCardContent"
             />
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, onUpdated } from "vue";
+import { ref, onUpdated, watch } from "vue";
 import { cardType } from "@/Interface/Card";
-
 import { getCardIndex } from "@/api";
+
+// import BusinessCard from "./BusinessCard.vue";
 
 interface col {
     num: Number;
@@ -62,11 +64,15 @@ const checkSize = () => {
 const GetCardIndex = async () => {
     try {
         const body = { index: card.value.length, get: 20 };
+        console.log(body);
         const res = await getCardIndex(body);
+
         if (res.status === 200) {
             res.data.cards.forEach((element: cardType) => {
                 card.value.push(element);
             });
+            console.log("get", res.data);
+            reRenderCard();
         }
     } catch (err) {
         console.log(err, "getIndexError");
@@ -106,8 +112,18 @@ const reRenderCard = () => {
     }
 };
 
-onUpdated(() => {
-    reRenderCard();
+const changeCardContent = () => {
+    console.log("in");
+
+    card.value = [];
+    currentCardIndex = 0;
+    cardColInfo.value = [];
+    checkSize();
+    GetCardIndex();
+};
+
+defineExpose({
+    changeCardContent,
 });
 
 const init = () => {
@@ -115,7 +131,6 @@ const init = () => {
     checkSize();
     //先拿一筆假資料
     GetCardIndex();
-    reRenderCard();
 };
 
 init();

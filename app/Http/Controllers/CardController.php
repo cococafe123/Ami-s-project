@@ -9,6 +9,7 @@ use App\Http\Requests\AddCardRequest;
 use App\Models\Card;
 use Inertia\Inertia;
 
+
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 
@@ -67,28 +68,30 @@ class CardController extends Controller
         return to_route('manage');
     }
 
-    public function index($request){
+    public function index(Request $request)
+    {
         $validated = $request->validate([
-            'index'=>['unsignedInteger','required'],
-            'get'=>['unsignedInteger','required']
+            'index' => ['integer', 'min:0', 'required'],
+            'get' => ['integer', 'min:1', 'required']
         ]);
 
-        $cards = Card::skip($request->index)->take($request->get);
+        $cards = Card::skip($validated['index'])->take($validated['get'])->get();
 
-        return responce()->json(['cards'=>$cards],200);
+        return response()->json(['cards' => $cards], 200);
     }
 
-    public function update($request,$id){
+    public function update($request, $id)
+    {
         $card = Card::findOrFail($id);
         $validated = $request->validate([
-            'like'=> ['required','boolean']
+            'like' => ['required', 'boolean']
         ]);
-        if($request->like){
-            $card['like']+=1;
-        }else{
-            $card[like]-=1;
+        if ($request->like) {
+            $card['like'] += 1;
+        } else {
+            $card['like'] -= 1;
         }
-       
-        return response()->json(['card'=>$card],200);
+
+        return response()->json(['card' => $card], 200);
     }
 }

@@ -28,8 +28,10 @@ class ViewController extends Controller
 
     public function showManage()
     {
+        $total = Card::count();
         // dd();
-        return Inertia::render('Manage/Index', ['totalCardNum' => $total,
+        return Inertia::render('Manage/Index', [
+            'totalCardNum' => $total,
         ]);
     }
 }
