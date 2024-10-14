@@ -1,6 +1,6 @@
 export interface cardType {
     img: String;
-    like: Number;
+    like: number;
     height: Number;
     id: String;
     width: Number;

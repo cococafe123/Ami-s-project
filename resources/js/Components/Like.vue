@@ -7,12 +7,20 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+const emits = defineEmits(["clickLike"]);
+
 const isLikeDisabled = ref(false);
+const inputValue = ref(false);
 
 const click = () => {
-    console.log("click");
-
+    inputValue.value = !inputValue.value;
+    if (inputValue.value) {
+        emits("clickLike", 1);
+    } else {
+        emits("clickLike", -1);
+    }
     isLikeDisabled.value = true;
+    // emits
     //三秒內不能再按
     setTimeout(() => {
         isLikeDisabled.value = false;

@@ -21,11 +21,11 @@
                 v-model="id"
                 type="text"
                 placeholder="搜尋卡片 ID"
-                class="h-[48px] rounded-full pl-10"
+                class="h-[48px] rounded-full pl-12"
                 @enter="submit"
             />
             <span
-                class="absolute inset-y-0 start-0 flex items-center justify-center px-2"
+                class="absolute inset-y-0 start-0 flex items-center justify-center px-2 pl-4"
             >
                 <Search class="size-6" />
             </span>
@@ -42,9 +42,10 @@
                 <div class="flex size-12 items-center justify-center">
                     <Search class="size-5" />
                 </div>
-                <div class="flex-1 pl-1 pr-4" ref="mobileInput">
+                <div class="flex-1 pl-1 pr-4">
                     <input
-                        v-if="isSearchOpen"
+                        v-show="isSearchOpen"
+                        ref="mobileInput"
                         v-model="id"
                         class="w-full bg-[#f7f9ff] outline-none"
                         placeholder="搜尋卡片 ID"
@@ -71,15 +72,9 @@ const id = ref();
 const openMobileSearch = () => {
     isSearchOpen.value = true;
 
-    const clickEvent = new MouseEvent("click", {
-        bubbles: false, // 允許事件冒泡
-        cancelable: true, // 事件可取消
-    });
-
     setTimeout(() => {
-        if (mobileInput.value.children[0]) {
-            console.log(mobileInput.value.children[0], "in");
-            mobileInput.value.children[0].focus();
+        if (mobileInput.value) {
+            mobileInput.value.focus();
         }
     }, 300);
 };
@@ -89,8 +84,6 @@ const closeMobileSearch = () => {
 };
 
 const submit = () => {
-    console.log(id.value);
-
     const form = useForm({
         _method: "get",
     });

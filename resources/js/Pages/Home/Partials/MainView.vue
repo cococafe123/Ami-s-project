@@ -8,16 +8,20 @@
                 共{{ totalCardNum }}張名片
             </div>
         </div>
-        <label
-            for="add-card-img-input"
-            class="button-shadow mb-6 block w-full rounded-lg border border-[#D9D9D9] bg-[#F7F9FF] px-3 py-3"
-            type="button"
-        >
-            <div class="flex w-full flex-row justify-center gap-2">
-                <Plus class="size-4" />
-                <div class="text-sm text-[#5a5a5a]">新增你的名片</div>
-            </div>
-        </label>
+        <div class="w-full p-2">
+            <label
+                for="add-card-img-input"
+                class="button-shadow mb-6 block w-full rounded-lg border border-[#D9D9D9] bg-[#F7F9FF] px-3 py-3"
+                type="button"
+            >
+                <div
+                    class="flex w-full flex-row items-center justify-center gap-2"
+                >
+                    <Plus class="size-4" />
+                    <div class="text-sm text-[#5a5a5a]">新增你的名片</div>
+                </div>
+            </label>
+        </div>
         <input
             ref="imgInput"
             class="hidden"

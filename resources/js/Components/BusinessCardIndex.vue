@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-full flex-row justify-around">
+    <div ref="scrollContainer" class="flex w-full flex-row justify-around">
         <div
             v-for="(item, index) in cardColNum"
             class="flex flex-col gap-6"
@@ -19,7 +19,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, onUpdated, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { cardType } from "@/Interface/Card";
 import { getCardIndex } from "@/api";
 
@@ -36,6 +36,7 @@ interface propsType {
 }
 
 const props = defineProps<propsType>();
+const scrollContainer = ref(null);
 
 const card = ref([]);
 
@@ -43,6 +44,8 @@ const cardColNum = ref(0);
 const cardColInfo = ref([]);
 
 let currentCardIndex = 0;
+
+const getLock = ref(false);
 
 const checkSize = () => {
     let width = window.innerWidth;
@@ -91,13 +94,12 @@ const reRenderCard = () => {
         }
         return index;
     };
+    getLock.value = false;
 
     for (let i = 0; i < 24; i++) {
-        // const cloneTestCard = Math.floor(Math.random() * 2)
-        //     ? testCard1
-        //     : testCard2;
-
         if (currentCardIndex >= card.value.length) {
+            //沒資料要鎖住
+            getLock.value = true;
             break;
         }
 
@@ -109,6 +111,17 @@ const reRenderCard = () => {
         cardColInfo.value[index].height += 24;
 
         currentCardIndex++;
+    }
+};
+
+const handleScroll = () => {
+    if (
+        window.innerHeight * 1.2 >
+            scrollContainer.value.getBoundingClientRect().bottom &&
+        !getLock.value
+    ) {
+        getLock.value = true;
+        GetCardIndex();
     }
 };
 
@@ -134,4 +147,16 @@ const init = () => {
 };
 
 init();
+
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll);
+    console.log(
+        scrollContainer.value.getBoundingClientRect().bottom,
+        window.innerHeight,
+    );
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("scroll", handleScroll);
+});
 </script>

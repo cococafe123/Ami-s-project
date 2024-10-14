@@ -10,4 +10,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/cards', [CardController::class, 'index']);
-Route::put('/card/{id}', [CardController::class, 'like']);
+Route::put('/card/{id}', [CardController::class, 'update']);

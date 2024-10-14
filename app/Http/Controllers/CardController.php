@@ -80,17 +80,15 @@ class CardController extends Controller
         return response()->json(['cards' => $cards], 200);
     }
 
-    public function update($request, $id)
+    public function update(Request $request, $id)
     {
         $card = Card::findOrFail($id);
         $validated = $request->validate([
-            'like' => ['required', 'boolean']
+            'like' => ['integer', 'min:0', 'required']
         ]);
-        if ($request->like) {
-            $card['like'] += 1;
-        } else {
-            $card['like'] -= 1;
-        }
+
+        $card['like'] = $validated['like'];
+        $card->save();
 
         return response()->json(['card' => $card], 200);
     }

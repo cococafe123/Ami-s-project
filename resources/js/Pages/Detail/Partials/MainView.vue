@@ -23,7 +23,7 @@
             ></Qrcode>
             <div class="flex flex-row justify-between">
                 <div class="flex flex-row items-center">
-                    <Like />
+                    <Like @click-like="PutLikeCard" />
                     <div class="pl-2 text-sm">{{ current.like }}</div>
                 </div>
                 <Transition name="fade">
@@ -47,7 +47,11 @@
             </div>
         </div>
 
-        <BusinessCardIndex ref="cardIndex" :manage="false" />
+        <BusinessCardIndex
+            class="hidden sm:flex"
+            ref="cardIndex"
+            :manage="false"
+        />
     </div>
 
     <div v-else class="w-full px-8 pb-6 pt-8 sm:pb-16 xl:px-[170px]">
@@ -98,22 +102,20 @@ import { ref } from "vue";
 import { cardType } from "@/Interface/Card";
 import { Link, Check } from "lucide-vue-next";
 import { Link as LinkUrl } from "@inertiajs/vue3";
+import { cloneDeep } from "lodash";
+import { putLikeCard } from "@/api";
 
 import Like from "@/Components/Like.vue";
 import Qrcode from "qrcode.vue";
 import asset from "@/asset";
 import BusinessCardIndex from "@/Components/BusinessCardIndex.vue";
 
-interface propsType {
-    current: cardType;
-}
-
-const props = defineProps<propsType>();
+const current = defineModel<cardType>();
 
 const imageSettings = ref({
     src: asset("logo-test.svg"),
-    width: 30,
-    height: 30,
+    width: 50,
+    height: 50,
     excavate: true,
 });
 
@@ -149,6 +151,19 @@ const copyUrlClick = () => {
     navigator.clipboard.writeText(url.value);
 
     toggleNoneFalse();
+};
+
+const PutLikeCard = async (like: number) => {
+    try {
+        const body = { like: like + current.value.like };
+        console.log(body);
+        const res = await putLikeCard(current.value.id, body);
+        if (res.status === 200) {
+            current.value = res.data.card;
+        }
+    } catch (err) {
+        console.log(err, "putLikeCardError");
+    }
 };
 </script>
 
