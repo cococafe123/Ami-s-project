@@ -3,14 +3,18 @@
         class="flex w-full max-w-[1440px] flex-row justify-between p-8 xl:px-[170px]"
     >
         <Transition name="logo">
-            <div v-show="!isSearchOpen" class="flex flex-col gap-1.5">
+            <Link
+                :href="route('home')"
+                v-show="!isSearchOpen"
+                class="flex flex-col gap-1.5"
+            >
                 <div class="text-[32px] font-semibold leading-9 text-[#444444]">
                     CardCity
                 </div>
                 <div class="h-5 text-sm font-semibold text-[#757575]">
                     上傳、分享你的名片
                 </div>
-            </div>
+            </Link>
         </Transition>
         <!-- normal search -->
         <div
@@ -47,7 +51,7 @@
                         v-show="isSearchOpen"
                         ref="mobileInput"
                         v-model="id"
-                        class="w-full bg-[#f7f9ff] outline-none"
+                        class="z-10 w-full bg-[#f7f9ff] outline-none"
                         placeholder="搜尋卡片 ID"
                         @keyup.enter="submit"
                     />
@@ -59,6 +63,7 @@
 <script lang="ts" setup>
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 import { Input } from "./ui/input";
+import { Link } from "@inertiajs/vue3";
 import { Search, X } from "lucide-vue-next";
 import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
