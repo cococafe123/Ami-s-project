@@ -67,14 +67,12 @@ const checkSize = () => {
 const GetCardIndex = async () => {
     try {
         const body = { index: card.value.length, get: 20 };
-        console.log(body);
         const res = await getCardIndex(body);
 
         if (res.status === 200) {
             res.data.cards.forEach((element: cardType) => {
                 card.value.push(element);
             });
-            console.log("get", res.data);
             reRenderCard();
         }
     } catch (err) {
@@ -109,7 +107,12 @@ const reRenderCard = () => {
 
         currentCardIndex++;
     }
-    getLock.value = false;
+
+    //讀取緩衝
+    setTimeout(() => {
+        getLock.value = false;
+        console.log(getLock.value);
+    }, 2000);
 };
 
 const handleScroll = () => {
