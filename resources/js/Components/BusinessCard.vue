@@ -62,7 +62,6 @@ const deleteCard = () => {
     });
     deleteForm.post(route("card.destroy", props.card.id), {
         onSuccess: () => {
-            console.log("delete");
             emit("deleteCard");
         },
     });

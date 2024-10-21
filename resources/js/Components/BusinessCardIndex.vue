@@ -45,7 +45,7 @@ const cardColInfo = ref([]);
 
 let currentCardIndex = 0;
 
-const getLock = ref(false);
+const getLock = ref(true);
 
 const checkSize = () => {
     let width = window.innerWidth;
@@ -67,14 +67,12 @@ const checkSize = () => {
 const GetCardIndex = async () => {
     try {
         const body = { index: card.value.length, get: 20 };
-        console.log(body);
         const res = await getCardIndex(body);
 
         if (res.status === 200) {
             res.data.cards.forEach((element: cardType) => {
                 card.value.push(element);
             });
-            console.log("get", res.data);
             reRenderCard();
         }
     } catch (err) {
@@ -94,13 +92,10 @@ const reRenderCard = () => {
         }
         return index;
     };
-    getLock.value = false;
 
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 20; i++) {
         if (currentCardIndex >= card.value.length) {
-            //沒資料要鎖住
-            getLock.value = true;
-            break;
+            return;
         }
 
         let index = getNextIndex();
@@ -112,11 +107,17 @@ const reRenderCard = () => {
 
         currentCardIndex++;
     }
+
+    //讀取緩衝
+    setTimeout(() => {
+        getLock.value = false;
+        console.log(getLock.value);
+    }, 2000);
 };
 
 const handleScroll = () => {
     if (
-        window.innerHeight * 1.2 >
+        window.innerHeight * 0.85 >
             scrollContainer.value.getBoundingClientRect().bottom &&
         !getLock.value
     ) {
@@ -126,8 +127,6 @@ const handleScroll = () => {
 };
 
 const changeCardContent = () => {
-    console.log("in");
-
     card.value = [];
     currentCardIndex = 0;
     cardColInfo.value = [];
@@ -150,10 +149,6 @@ init();
 
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
-    console.log(
-        scrollContainer.value.getBoundingClientRect().bottom,
-        window.innerHeight,
-    );
 });
 
 onBeforeUnmount(() => {

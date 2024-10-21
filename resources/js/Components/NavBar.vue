@@ -38,7 +38,7 @@
         <!-- mobile search -->
         <div class="flex h-[62px] flex-1 justify-end sm:hidden">
             <button
-                class="search-transform z-20 flex h-12 w-12 flex-row items-center justify-center rounded-full border border-[#757575]"
+                class="search-transform flex h-12 w-12 flex-row items-center justify-center rounded-full border border-[#757575]"
                 :class="{ 'w-12': !isSearchOpen, 'w-full': isSearchOpen }"
                 @click="openMobileSearch"
                 @mouseleave="closeMobileSearch"
@@ -51,7 +51,7 @@
                         v-show="isSearchOpen"
                         ref="mobileInput"
                         v-model="id"
-                        class="z-10 w-full bg-[#f7f9ff] outline-none"
+                        class="block w-full bg-[#f7f9ff] outline-none"
                         placeholder="搜尋卡片 ID"
                         @keyup.enter="submit"
                     />

@@ -1,6 +1,6 @@
 <template>
     <div class="w-full px-8 pb-6 sm:pb-16 xl:px-[170px]">
-        <div class="flex flex-row gap-1 py-2">
+        <div class="flex flex-row gap-1 p-2">
             <img :src="asset('element-tv.svg')" />
             <div
                 class="items-center text-[11px] font-normal leading-4 text-[#757575]"

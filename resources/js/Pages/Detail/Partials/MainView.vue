@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="current"
-        class="flex size-full flex-row justify-around gap-8 px-8 pb-6 pt-8 sm:pb-16 xl:px-[170px]"
+        class="flex size-full flex-row justify-around pb-6 pt-8 sm:gap-8 sm:px-8 sm:pb-16 xl:px-[170px]"
     >
         <div
             class="flex w-[65%] min-w-[330px] flex-col items-center gap-2 sm:items-start"
@@ -156,7 +156,6 @@ const copyUrlClick = () => {
 const PutLikeCard = async (like: number) => {
     try {
         const body = { like: like + current.value.like };
-        console.log(body);
         const res = await putLikeCard(current.value.id, body);
         if (res.status === 200) {
             current.value = res.data.card;
