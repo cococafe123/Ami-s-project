@@ -72,10 +72,11 @@ class CardController extends Controller
     {
         $validated = $request->validate([
             'index' => ['integer', 'min:0', 'required'],
-            'get' => ['integer', 'min:1', 'required']
+            'get' => ['integer', 'min:1', 'required'],
+            'sort' => ['string', 'required']
         ]);
 
-        $cards = Card::skip($validated['index'])->take($validated['get'])->get();
+        $cards = Card::orderBy('created_at', $validated['sort'])->skip($validated['index'])->take($validated['get'])->get();
 
         return response()->json(['cards' => $cards], 200);
     }

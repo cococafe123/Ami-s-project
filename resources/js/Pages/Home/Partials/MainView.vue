@@ -9,8 +9,12 @@
                     共{{ totalCardNum }}張名片
                 </div>
             </div>
-            <button class="flex flex-row gap-2.5 p-2">
-                <div class="">{{}}</div>
+            <button
+                class="flex flex-row items-center gap-2.5 p-2 text-sm text-[#757575]"
+                @click="changeSort"
+            >
+                <div v-if="sort === 'asc'" class="">舊到新</div>
+                <div v-else class="">新到舊</div>
                 <ChevronsUpDown class="size-4 stroke-1" />
             </button>
         </div>
@@ -36,7 +40,11 @@
             accept="image/png, image/jpeg, image/gif"
             @change="submit"
         />
-        <BusinessCardIndex ref="cardIndex" :manage="false" />
+        <BusinessCardIndex
+            v-model:sort="sort"
+            ref="cardIndex"
+            :manage="false"
+        />
     </div>
 </template>
 <script lang="ts" setup>
@@ -57,7 +65,7 @@ const props = defineProps<propsType>();
 
 const cardIndex = ref(null);
 
-const sort = ref("desc");
+const sort = ref("asc");
 
 const form = useForm({
     img: "",
@@ -68,6 +76,8 @@ const imgInput = ref(null);
 const changeSort = () => {
     if (sort.value === "desc") {
         sort.value = "asc";
+    } else {
+        sort.value = "desc";
     }
 };
 

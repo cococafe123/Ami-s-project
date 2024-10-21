@@ -36,6 +36,9 @@ interface propsType {
 }
 
 const props = defineProps<propsType>();
+
+const sort = defineModel("sort");
+
 const scrollContainer = ref(null);
 
 const card = ref([]);
@@ -66,7 +69,21 @@ const checkSize = () => {
 
 const GetCardIndex = async () => {
     try {
-        const body = { index: card.value.length, get: 20 };
+        let body: any;
+        if (sort.value) {
+            body = {
+                index: card.value.length,
+                get: 20,
+                sort: sort.value,
+            };
+        } else {
+            body = {
+                index: card.value.length,
+                get: 20,
+                sort: "asc",
+            };
+        }
+
         const res = await getCardIndex(body);
 
         if (res.status === 200) {
@@ -111,13 +128,12 @@ const reRenderCard = () => {
     //讀取緩衝
     setTimeout(() => {
         getLock.value = false;
-        console.log(getLock.value);
-    }, 2000);
+    }, 1000);
 };
 
 const handleScroll = () => {
     if (
-        window.innerHeight * 0.85 >
+        window.innerHeight - 100 >
             scrollContainer.value.getBoundingClientRect().bottom &&
         !getLock.value
     ) {
@@ -153,5 +169,9 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     window.removeEventListener("scroll", handleScroll);
+});
+
+watch(sort, () => {
+    changeCardContent();
 });
 </script>
