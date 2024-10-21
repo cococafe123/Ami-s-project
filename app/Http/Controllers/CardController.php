@@ -63,6 +63,14 @@ class CardController extends Controller
         if ($card === null) {
             abort(404);
         }
+        $imageName = $card['img'];
+        $imagePath = public_path($imageName);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        } else {
+            echo 'File does not exist' . $imagePath;
+        }
+
         $card->delete();
 
         return to_route('manage');
