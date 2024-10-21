@@ -1,12 +1,18 @@
 <template>
     <div class="w-full px-8 pb-6 sm:pb-16 xl:px-[170px]">
-        <div class="flex flex-row gap-1 p-2">
-            <img :src="asset('element-tv.svg')" />
-            <div
-                class="items-center text-[11px] font-normal leading-4 text-[#757575]"
-            >
-                共{{ totalCardNum }}張名片
+        <div class="flex flex-row justify-between gap-1 p-2">
+            <div class="flex flex-row content-center gap-2">
+                <img :src="asset('element-tv.svg')" />
+                <div
+                    class="items-center text-[11px] font-normal leading-4 text-[#757575]"
+                >
+                    共{{ totalCardNum }}張名片
+                </div>
             </div>
+            <button class="flex flex-row gap-2.5 p-2">
+                <div class="">{{}}</div>
+                <ChevronsUpDown class="size-4 stroke-1" />
+            </button>
         </div>
         <div class="w-full p-2">
             <label
@@ -37,6 +43,7 @@
 import { ref, onUpdated } from "vue";
 import { Plus } from "lucide-vue-next";
 import { useForm } from "@inertiajs/vue3";
+import { ChevronsUpDown } from "lucide-vue-next";
 
 import asset from "@/asset";
 import { cardType } from "@/Interface/Card";
@@ -50,11 +57,19 @@ const props = defineProps<propsType>();
 
 const cardIndex = ref(null);
 
+const sort = ref("desc");
+
 const form = useForm({
     img: "",
 });
 
 const imgInput = ref(null);
+
+const changeSort = () => {
+    if (sort.value === "desc") {
+        sort.value = "asc";
+    }
+};
 
 const submit = () => {
     var files = imgInput.value.files;
