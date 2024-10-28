@@ -35,5 +35,12 @@ class ViewController extends Controller
             
         ]);
     }
+
+    public function showTest( )
+    {
+        return Inertia::render('TEST/Show', [
+            
+        ]);
+    }
     //
 }

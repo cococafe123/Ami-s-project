@@ -31,3 +31,5 @@ Route::get('/Shop', [ViewController::class, 'showShop'])->name('shop');
 Route::get('/Shop/{id}', [ViewController::class, 'showDetail'])->name('detail');
 Route::get('/About', [ViewController::class, 'showAbout'])->name('about');
 Route::get('/HeartLink/', [HeartLinkController::class, 'showHome'])->name('HeartLinkHome');
+
+Route::get('/TEST/', [ViewController::class, 'showTest'])->name('test');
