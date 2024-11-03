@@ -6,6 +6,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\HeartLinkController;
+use App\Http\Controllers\ArchViewController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -33,3 +34,6 @@ Route::get('/About', [ViewController::class, 'showAbout'])->name('about');
 Route::get('/HeartLink/', [HeartLinkController::class, 'showHome'])->name('HeartLinkHome');
 
 Route::get('/TEST/', [ViewController::class, 'showTest'])->name('test');
+
+Route::get('/Arch/', [ArchViewController::class, 'showHome'])->name('ArchHome');
+Route::get('/Arch/Blog', [ArchViewController::class, 'showBlog'])->name('ArchBlog');

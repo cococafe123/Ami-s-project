@@ -21,15 +21,37 @@
         font-optical-sizing: auto;
     }
 
-    .font-bri{
+    .font-bri {
         font-family: "Bricolage Grotesque", sans-serif;
     }
 
-    .font-bigshot{
+    .font-bigshot {
         font-family: "Bigshot One", serif;
     }
 
     .flex {
         flex-wrap: wrap;
+    }
+
+    .arch-bg {
+        background-image: url("../../public/Image/Arch/arch-bg.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        box-shadow: var(--sds-size-depth-0) var(--sds-size-depth-100)
+            var(--sds-size-depth-100) var(--sds-size-depth-negative-100)
+            var(--sds-color-black-100);
+
+        box-shadow: var(--sds-size-depth-0) var(--sds-size-depth-400)
+            var(--sds-size-depth-800) var(--sds-size-depth-negative-100)
+            var(--sds-color-black-200);
+    }
+
+    .arch-blog-bg {
+        background-image: url("../../public/Image/Arch/archBlog-1.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        backdrop-filter: blur(8px);
     }
 }
