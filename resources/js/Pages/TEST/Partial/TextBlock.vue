@@ -1,7 +1,7 @@
 <template>
     <button
         ref="textRef"
-        class="absolute"
+        class="absolute bg-gray-400"
         :style="textBlockStyle"
         @mousedown="startTextDrag($event)"
         @click="isChoosing = true"
@@ -16,11 +16,12 @@
                 </button>
             </div>
         </div>
-        <input
+        {{ textContent }}
+        <!-- <input
             class="w-fit border-none border-black p-0 shadow-none ring-0 focus:border-none focus:ring-0"
             :readonly="!isTexting"
             v-model="textContent"
-        />
+        /> -->
     </button>
 </template>
 <script setup lang="ts">
