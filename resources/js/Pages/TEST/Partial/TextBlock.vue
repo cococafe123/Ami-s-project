@@ -1,14 +1,14 @@
 <template>
     <button
         ref="textRef"
-        class="absolute bg-gray-400"
+        class="absolute"
         :style="textBlockStyle"
         @mousedown="startTextDrag($event)"
         @click="isChoosing = true"
     >
         <div class="relative">
             <div class="absolute top-[-20px]" :class="{ hidden: !isChoosing }">
-                <button>
+                <button @click.stop="editInputValue">
                     <img
                         :src="asset('Test/element-pencil.svg')"
                         class="size-4"
@@ -16,12 +16,14 @@
                 </button>
             </div>
         </div>
-        {{ textContent }}
-        <!-- <input
-            class="w-fit border-none border-black p-0 shadow-none ring-0 focus:border-none focus:ring-0"
-            :readonly="!isTexting"
+        <!-- {{ textContent }} -->
+        <input
             v-model="textContent"
-        /> -->
+            ref="inputRef"
+            class="border-none border-black bg-transparent p-0 shadow-none ring-0 focus:border-none focus:ring-0"
+            :readonly="!isTexting"
+            :style="{ width: `${textContent.length - 3}ch` }"
+        />
     </button>
 </template>
 <script setup lang="ts">
@@ -31,6 +33,8 @@ import { onClickOutside } from "@vueuse/core";
 import Input from "@/Components/Input.vue";
 
 const textRef = ref();
+
+const inputRef = ref();
 
 const textBlockPosition = ref({ x: 217, y: 472, isDragging: false });
 
@@ -48,7 +52,7 @@ const textBlockStyle = computed(() => {
     };
 });
 
-onClickOutside(textRef, (event) => (isChoosing.value = false));
+onClickOutside(textRef, (event: any) => (isChoosing.value = false));
 
 const startTextDrag = (event: MouseEvent) => {
     textBlockPosition.value.isDragging = true;
@@ -70,5 +74,14 @@ const startTextDrag = (event: MouseEvent) => {
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
+};
+
+const editInputValue = (event: any) => {
+    event.stopPropagation();
+    console.log("test");
+
+    if (inputRef.value) {
+        inputRef.value.focus();
+    }
 };
 </script>
