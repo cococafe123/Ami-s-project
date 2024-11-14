@@ -1,87 +1,184 @@
 <template>
-    <button
-        ref="textRef"
-        class="absolute"
-        :style="textBlockStyle"
-        @mousedown="startTextDrag($event)"
-        @click="isChoosing = true"
-    >
-        <div class="relative">
-            <div class="absolute top-[-20px]" :class="{ hidden: !isChoosing }">
-                <button @click.stop="editInputValue">
-                    <img
-                        :src="asset('Test/element-pencil.svg')"
-                        class="size-4"
-                    />
-                </button>
-            </div>
-        </div>
-        <!-- {{ textContent }} -->
-        <input
-            v-model="textContent"
-            ref="inputRef"
-            class="border-none border-black bg-transparent p-0 shadow-none ring-0 focus:border-none focus:ring-0"
-            :readonly="!isTexting"
-            :style="{ width: `${textContent.length - 3}ch` }"
+    <v-group @mouseenter="mouseIn" @mouseleave="mouseLeave">
+        <v-text
+            ref="textRef"
+            :config="textConfig"
+            @dragmove="handleDragMove"
+            @click="showEditGroup"
         />
-    </button>
+        <!-- 筆圖示 -->
+        <v-group ref="groupRef">
+            <v-image :config="iconEditConfig" @click="editClick" />
+            <v-image :config="iconCopyConfig" @click="copyClick" />
+            <v-image :config="iconDeleteConfig" @click="deleteClick" />
+        </v-group>
+    </v-group>
+
+    <input
+        ref="inputRef"
+        v-model="textConfig.text"
+        class="absolute border-none border-black p-0 text-[24px] shadow-none ring-0 focus:border-none focus:ring-0"
+        @keyup.enter="finishEditing"
+        :style="inputConfig"
+    />
 </template>
 <script setup lang="ts">
-import asset from "@/asset";
-import { ref, computed } from "vue";
+import { ref, reactive, inject, Ref, onMounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import Input from "@/Components/Input.vue";
 
-const textRef = ref();
+const emits = defineEmits(["deleteNode"]);
 
-const inputRef = ref();
-
-const textBlockPosition = ref({ x: 217, y: 472, isDragging: false });
-
-const textContent = ref("test button");
-
-const isChoosing = ref(false);
-
-const isTexting = ref(false);
-
-const textBlockStyle = computed(() => {
-    return {
-        left: `${textBlockPosition.value.x}px`,
-        top: `${textBlockPosition.value.y}px`,
-        cursor: textBlockPosition.value.isDragging ? "grabbing" : "grab",
-    };
+const textConfig = reactive({
+    x: 50,
+    y: 50,
+    text: "test",
+    fontSize: 24,
+    fill: "black",
+    draggable: true,
 });
 
-onClickOutside(textRef, (event: any) => (isChoosing.value = false));
+const deleteImage = new window.Image();
+deleteImage.src = "/image/Test/element-delete.svg";
+const iconDeleteConfig = reactive({
+    x: textConfig.x - 50,
+    y: textConfig.y - 40,
+    radius: 10,
+    draggable: false,
+    image: deleteImage,
+});
 
-const startTextDrag = (event: MouseEvent) => {
-    textBlockPosition.value.isDragging = true;
-    const startX = event.clientX - textBlockPosition.value.x;
-    const startY = event.clientY - textBlockPosition.value.y;
+const copyImage = new window.Image();
+copyImage.src = "/image/Test/element-copy.svg";
+const iconCopyConfig = reactive({
+    x: iconDeleteConfig.x + 50,
+    y: textConfig.y - 40,
+    radius: 10,
+    draggable: false,
+    image: copyImage,
+});
 
-    const onMouseMove = (moveEvent: MouseEvent) => {
-        if (textBlockPosition.value.isDragging) {
-            textBlockPosition.value.x = moveEvent.clientX - startX;
-            textBlockPosition.value.y = moveEvent.clientY - startY;
-        }
+const editImage = new window.Image();
+editImage.src = "/image/Test/element-pencil.svg";
+
+const iconEditConfig = reactive({
+    x: iconCopyConfig.x + 50,
+    y: textConfig.y - 40,
+    radius: 10,
+    draggable: false,
+    image: editImage,
+});
+
+const isEditing = ref(false);
+
+const groupRef = ref(null);
+const textRef = ref(null);
+const inputRef = ref(null);
+
+const inputConfig = reactive({
+    top: "0",
+    left: "0",
+    width: "0",
+    Position: "absolute",
+});
+
+const stageRef: Ref = inject("stageRef");
+
+function handleDragMove(e: any) {
+    showEditGroup();
+    const node = e.target;
+    textConfig.x = node.x();
+    textConfig.y = node.y();
+    iconDeleteConfig.x = textConfig.x - 50; // 更新圖示的位置
+    iconCopyConfig.x = iconDeleteConfig.x + 50;
+    iconEditConfig.x = iconCopyConfig.x + 50;
+
+    iconEditConfig.y =
+        iconCopyConfig.y =
+        iconDeleteConfig.y =
+            textConfig.y - 40;
+}
+
+function editClick() {
+    //隱藏
+    groupRef.value.getNode().hide();
+    textRef.value.getNode().hide();
+
+    //抓位置
+    const textPos = textRef.value.getNode().getAbsolutePosition();
+    const stagePos = stageRef.value
+        .getNode()
+        .container()
+        .getBoundingClientRect();
+
+    //setInputStyle
+    const style = {
+        x: stagePos.left + textPos.x,
+        y: stagePos.top + textPos.y,
+        width: textRef.value.getNode().width() + 10,
     };
 
-    const onMouseUp = () => {
-        textBlockPosition.value.isDragging = false;
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("mouseup", onMouseUp);
-    };
+    console.log(style);
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-};
+    inputConfig.top = style.y + "px";
+    inputConfig.left = style.x + "px";
+    inputConfig.width = "auto";
 
-const editInputValue = (event: any) => {
-    event.stopPropagation();
+    document.body.appendChild(inputRef.value);
+    inputRef.value.focus();
+
+    setTimeout(() => {
+        isEditing.value = true;
+    }, 100);
+}
+
+function finishEditing() {
     console.log("test");
+    isEditing.value = false;
+    groupRef.value.getNode().show();
+    textRef.value.getNode().show();
+    document.body.removeChild(inputRef.value);
+}
 
-    if (inputRef.value) {
-        inputRef.value.focus();
+onClickOutside(inputRef, (event: any) => {
+    if (isEditing.value) {
+        finishEditing();
     }
+});
+
+const isInside = ref(true);
+
+const showEditGroup = () => {
+    groupRef.value.getNode().show();
 };
+
+const hideEditGroup = () => {
+    groupRef.value.getNode().hide();
+    document.body.removeEventListener("click", hideEditGroup);
+};
+const mouseIn = () => {
+    isInside.value = true;
+    document.body.removeEventListener("click", hideEditGroup);
+};
+
+const mouseLeave = () => {
+    isInside.value = false;
+    document.body.addEventListener("click", hideEditGroup);
+};
+
+const copyClick = () => {
+    navigator.clipboard.writeText(textConfig.text);
+};
+
+const deleteClick = () => {
+    console.log("delete in");
+
+    emits("deleteNode");
+};
+
+onMounted(() => {
+    groupRef.value.getNode().hide();
+});
+
+const init = () => {};
+init();
 </script>

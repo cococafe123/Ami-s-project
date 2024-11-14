@@ -1,30 +1,32 @@
-import './bootstrap';
-import '../css/app.css';
+import "./bootstrap";
+import "../css/app.css";
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { createApp, h } from "vue";
+import { createInertiaApp } from "@inertiajs/vue3";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 
-import { importGlobalComponents } from './Components';
+import { importGlobalComponents } from "./Components";
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+import VueKonva from "vue-konva";
+
+const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    resolve: (name) =>
+        resolvePageComponent(
+            `./Pages/${name}.vue`,
+            import.meta.glob("./Pages/**/*.vue"),
+        ),
     setup({ el, App, props, plugin }) {
+        const app = createApp({ render: () => h(App, props) });
 
-        const app = createApp({ render: () => h(App, props) })
+        importGlobalComponents(app);
 
-        importGlobalComponents(app)
-
-        return app
-            .use(plugin)
-            .use(ZiggyVue)
-            .mount(el);
+        return app.use(plugin).use(VueKonva).use(ZiggyVue).mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: "#4B5563",
     },
 });

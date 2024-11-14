@@ -1,73 +1,80 @@
 <template>
     <div class="min-w-screen flex min-h-screen content-center justify-evenly">
         <div class="flex h-[100vh] w-[50vw] flex-col">
-            <div class="relative h-[80vh] rounded-xl border border-gray-500">
-                <TextBlock
-                    :ref="putRef"
-                    v-for="(text, index) in textBlock"
-                    :class="`z-${allZIndex[index]}`"
-                >
-                    test button
-                </TextBlock>
+            <div
+                ref="outFrameRef"
+                class="relative h-[80vh] rounded-xl border border-gray-500"
+            >
+                <v-stage ref="stageRef" :config="frameSize">
+                    <v-layer>
+                        <div v-for="(item, index) in textBlock">
+                            <TextBlock
+                                v-if="allType[index] === 'text'"
+                                :ref="pushRef"
+                                @delete-node="deleteTextNode(item, index)"
+                            />
+                        </div>
+                    </v-layer>
+                </v-stage>
             </div>
             <div
-                class="flex flex-1 flex-row content-center gap-8 rounded-xl border border-gray-500 px-8"
+                class="flex min-h-[200px] flex-1 flex-row content-center gap-8 rounded-xl border border-gray-500 px-8"
             >
-                <button class="border" @click="textBlock++">新增文字</button>
+                <button class="border" @click="addTextBlock">新增文字</button>
                 <button class="border">貼圖</button>
-                <button class="border">圖層</button>
-            </div>
-        </div>
-        <div class="flex h-[100vh] w-[30vw] flex-col">
-            <div
-                class="relative flex h-[100vh] flex-col gap-4 rounded-xl border border-gray-500 py-4"
-            >
-                <div
-                    v-for="(item, index) in allRef"
-                    class="flex w-full flex-row items-center justify-around border border-black"
-                >
-                    <div>{{ index + 1 }}</div>
-                    <button class="size-8" @click="upZ(index)">上</button>
-                    <button class="size-8" @click="downZ(index)">下</button>
-                </div>
+                <button class="border" @click="">測試按鍵</button>
             </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { indexOf } from "lodash";
+import { ref, onMounted, provide, inject } from "vue";
 
 import TextBlock from "./Partial/TextBlock.vue";
 
-const textBlock = ref(0);
+const textBlock = ref<string[]>([]);
+
+const outFrameRef = ref(null);
+
+const frameSize = ref({ width: 0, height: 0 });
+
+const stageRef = ref(null);
 
 const allRef = ref([]);
+const allType = ref([]);
 
-const allZIndex = ref([]);
+const getFrameSize = () => {
+    frameSize.value.width =
+        window.innerWidth > 700 ? window.innerWidth * 0.5 : 350;
+    frameSize.value.height =
+        window.innerHeight > 700 / 0.8 ? window.innerHeight * 0.8 : 700;
+};
 
-const putRef = (el: any) => {
+const pushRef = (el: any) => {
     if (!allRef.value.includes(el)) {
         allRef.value.push(el);
-        allZIndex.value.push((allRef.value.length - 1) * 10);
-    }
-    console.log(allZIndex.value);
-};
-
-const upZ = (index: number) => {
-    if (allZIndex.value[index] < 10 * allRef.value.length) {
-        const findIndex = indexOf(allZIndex.value, allZIndex.value[index] + 10);
-        allZIndex.value[findIndex] = allZIndex.value[index];
-        allZIndex.value[index] += 10;
     }
 };
 
-const downZ = (index: number) => {
-    if (allZIndex.value[index] > 0) {
-        const findIndex = indexOf(allZIndex.value, allZIndex.value[index] - 10);
-        console.log(allZIndex.value[index]);
-        allZIndex.value[findIndex] = allZIndex.value[index];
-        allZIndex.value[index] -= 10;
-    }
+const addTextBlock = () => {
+    textBlock.value.push("text");
+    allType.value.push("text");
 };
+
+const deleteTextNode = (item: any, index: number) => {
+    textBlock.value.splice(item, 1);
+    allType.value.splice(index, 1);
+    console.log("delete emit");
+
+    console.log(textBlock.value, allType.value);
+};
+
+const init = () => {
+    getFrameSize();
+};
+
+init();
+
+provide("stageRef", stageRef);
+provide("outFrameRef", outFrameRef.value);
 </script>
