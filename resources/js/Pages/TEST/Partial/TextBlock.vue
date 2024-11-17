@@ -12,6 +12,7 @@
             <v-image :config="iconCopyConfig" @click="copyClick" />
             <v-image :config="iconDeleteConfig" @click="deleteClick" />
         </v-group>
+        <v-transformer ref="transformerRef" />
     </v-group>
 
     <input
@@ -73,6 +74,7 @@ const isEditing = ref(false);
 const groupRef = ref(null);
 const textRef = ref(null);
 const inputRef = ref(null);
+const transformerRef = ref(null);
 
 const inputConfig = reactive({
     top: "0",
@@ -117,8 +119,6 @@ function editClick() {
         width: textRef.value.getNode().width() + 10,
     };
 
-    console.log(style);
-
     inputConfig.top = style.y + "px";
     inputConfig.left = style.x + "px";
     inputConfig.width = "auto";
@@ -126,17 +126,19 @@ function editClick() {
     document.body.appendChild(inputRef.value);
     inputRef.value.focus();
 
+    transformerRef.value.getNode().nodes([]);
+
     setTimeout(() => {
         isEditing.value = true;
     }, 100);
 }
 
 function finishEditing() {
-    console.log("test");
     isEditing.value = false;
     groupRef.value.getNode().show();
     textRef.value.getNode().show();
     document.body.removeChild(inputRef.value);
+    transformerRef.value.getNode().nodes([textRef.value.getNode()]);
 }
 
 onClickOutside(inputRef, (event: any) => {
@@ -149,10 +151,12 @@ const isInside = ref(true);
 
 const showEditGroup = () => {
     groupRef.value.getNode().show();
+    transformerRef.value.getNode().nodes([textRef.value.getNode()]);
 };
 
 const hideEditGroup = () => {
     groupRef.value.getNode().hide();
+    transformerRef.value.getNode().nodes([]);
     document.body.removeEventListener("click", hideEditGroup);
 };
 const mouseIn = () => {
@@ -170,8 +174,6 @@ const copyClick = () => {
 };
 
 const deleteClick = () => {
-    console.log("delete in");
-
     emits("deleteNode");
 };
 

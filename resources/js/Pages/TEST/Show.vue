@@ -7,16 +7,17 @@
             >
                 <v-stage ref="stageRef" :config="frameSize">
                     <v-layer>
-                        <div v-for="(item, index) in textBlock">
+                        <div v-for="(item, index) in textBlock" :key="index">
                             <TextBlock
                                 v-if="allType[index] === 'text'"
                                 :ref="pushRef"
-                                @delete-node="deleteTextNode(item, index)"
+                                @delete-node="deleteTextNode(index)"
                             />
                         </div>
                     </v-layer>
                 </v-stage>
             </div>
+
             <div
                 class="flex min-h-[200px] flex-1 flex-row content-center gap-8 rounded-xl border border-gray-500 px-8"
             >
@@ -26,6 +27,14 @@
             </div>
         </div>
     </div>
+
+    <button
+        v-for="(item, index) in testBlock"
+        @click="testBlock.splice(index, 1)"
+        class="pr-6"
+    >
+        {{ item }}
+    </button>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, provide, inject } from "vue";
@@ -33,6 +42,8 @@ import { ref, onMounted, provide, inject } from "vue";
 import TextBlock from "./Partial/TextBlock.vue";
 
 const textBlock = ref<string[]>([]);
+
+const testBlock = ref<string[]>(["test1", "test2", "test3"]);
 
 const outFrameRef = ref(null);
 
@@ -42,6 +53,8 @@ const stageRef = ref(null);
 
 const allRef = ref([]);
 const allType = ref([]);
+
+let index = 0;
 
 const getFrameSize = () => {
     frameSize.value.width =
@@ -57,16 +70,17 @@ const pushRef = (el: any) => {
 };
 
 const addTextBlock = () => {
-    textBlock.value.push("text");
+    textBlock.value.push("text" + index);
+    index++;
+    console.log(index);
     allType.value.push("text");
 };
 
-const deleteTextNode = (item: any, index: number) => {
-    textBlock.value.splice(item, 1);
-    allType.value.splice(index, 1);
-    console.log("delete emit");
+const deleteTextNode = (index: number) => {
+    console.log(textBlock.value[index]);
+    textBlock.value.splice(index, 1);
 
-    console.log(textBlock.value, allType.value);
+    allType.value.splice(index, 1);
 };
 
 const init = () => {
