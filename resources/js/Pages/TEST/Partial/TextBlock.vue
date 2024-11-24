@@ -2,12 +2,13 @@
     <v-group @mouseenter="mouseIn" @mouseleave="mouseLeave">
         <v-text
             ref="textRef"
-            :config="textConfig"
+            :config="combineConfig"
             @dragmove="handleDragMove"
             @click="showEditGroup"
         />
         <!-- 筆圖示 -->
         <v-group ref="groupRef">
+            <v-rect :config="editGroupConfig" />
             <v-image :config="iconEditConfig" @click="editClick" />
             <v-image :config="iconCopyConfig" @click="copyClick" />
             <v-image :config="iconDeleteConfig" @click="deleteClick" />
@@ -24,18 +25,51 @@
     />
 </template>
 <script setup lang="ts">
-import { ref, reactive, inject, Ref, onMounted } from "vue";
+import { ref, reactive, inject, Ref, onMounted, computed } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
-const emits = defineEmits(["deleteNode"]);
+interface propsType {}
+
+interface outConfigType {
+    font: string | null;
+    color: string | null;
+}
+
+const props = defineProps<propsType>();
+
+const outConfig = defineModel<outConfigType>("config");
+
+const emits = defineEmits(["deleteNode", "clickOn", "leave"]);
 
 const textConfig = reactive({
     x: 50,
     y: 50,
     text: "test",
     fontSize: 24,
-    fill: "black",
+    fill: "red",
     draggable: true,
+});
+
+const combineConfig = computed(() => {
+    return {
+        x: textConfig.x,
+        y: textConfig.y,
+        text: textConfig.text,
+        fontSize: textConfig.fontSize,
+        draggable: textConfig.draggable,
+        fill: outConfig.value.color,
+        fontFamily: outConfig.value.font,
+    };
+});
+
+const editGroupConfig = reactive({
+    x: textConfig.x - 60,
+    y: textConfig.y - 50,
+    width: 150,
+    height: 40,
+    cornerRadius: 20,
+    fill: "gray",
+    draggable: false,
 });
 
 const deleteImage = new window.Image();
@@ -93,11 +127,14 @@ function handleDragMove(e: any) {
     iconDeleteConfig.x = textConfig.x - 50; // 更新圖示的位置
     iconCopyConfig.x = iconDeleteConfig.x + 50;
     iconEditConfig.x = iconCopyConfig.x + 50;
+    editGroupConfig.x = textConfig.x - 60;
 
     iconEditConfig.y =
         iconCopyConfig.y =
         iconDeleteConfig.y =
             textConfig.y - 40;
+
+    editGroupConfig.y = textConfig.y - 50;
 }
 
 function editClick() {
@@ -152,12 +189,14 @@ const isInside = ref(true);
 const showEditGroup = () => {
     groupRef.value.getNode().show();
     transformerRef.value.getNode().nodes([textRef.value.getNode()]);
+    emits("clickOn");
 };
 
 const hideEditGroup = () => {
     groupRef.value.getNode().hide();
     transformerRef.value.getNode().nodes([]);
     document.body.removeEventListener("click", hideEditGroup);
+    emits("leave");
 };
 const mouseIn = () => {
     isInside.value = true;

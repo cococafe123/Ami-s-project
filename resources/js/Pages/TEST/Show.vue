@@ -1,5 +1,5 @@
 <template>
-    <div class="min-w-screen flex min-h-screen content-center justify-evenly">
+    <div class="flex min-h-screen min-w-full content-center justify-evenly">
         <div class="flex h-[100vh] w-[50vw] flex-col">
             <div
                 ref="outFrameRef"
@@ -7,11 +7,16 @@
             >
                 <v-stage ref="stageRef" :config="frameSize">
                     <v-layer>
-                        <div v-for="(item, index) in textBlock" :key="index">
+                        <div v-for="(item, index) in allType" :key="index">
                             <TextBlock
                                 v-if="allType[index] === 'text'"
-                                :ref="pushRef"
-                                @delete-node="deleteTextNode(index)"
+                                :config="allConfig[index]"
+                                @delete-node="deleteNode(index)"
+                                @click-on="
+                                    clickOnIndex = index;
+                                    clickOnText = true;
+                                "
+                                @leave="clickOnText = false"
                             />
                         </div>
                     </v-layer>
@@ -19,31 +24,74 @@
             </div>
 
             <div
-                class="flex min-h-[200px] flex-1 flex-row content-center gap-8 rounded-xl border border-gray-500 px-8"
+                class="flex min-h-[200px] flex-1 flex-row items-center gap-8 rounded-xl border border-gray-500 px-8"
             >
-                <button class="border" @click="addTextBlock">新增文字</button>
-                <button class="border">貼圖</button>
-                <button class="border" @click="">測試按鍵</button>
+                <button class="h-12 rounded border p-2" @click="addTextBlock">
+                    新增文字
+                </button>
+                <!-- <button class="border">貼圖</button>
+                <button class="border" @click="">測試按鍵</button> -->
+                <div v-if="clickOnText" class="flex w-[200px] flex-col gap-2">
+                    <Select
+                        @update:modelValue="
+                            (value: string) => {
+                                allConfig[clickOnIndex].font = value;
+                            }
+                        "
+                    >
+                        <SelectTrigger class="w-full">
+                            <SelectValue :placeholder="selectTextFontType" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem
+                                    v-for="font in textFontOptions"
+                                    :value="font"
+                                >
+                                    {{ font }}
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <Select
+                        @update:modelValue="
+                            (value: string) => {
+                                allConfig[clickOnIndex].color = value;
+                            }
+                        "
+                    >
+                        <SelectTrigger class="w-full">
+                            <SelectValue :placeholder="selectTextColorType" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem
+                                    v-for="color in textColorOptions"
+                                    :value="color"
+                                >
+                                    {{ color }}
+                                </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
         </div>
     </div>
-
-    <button
-        v-for="(item, index) in testBlock"
-        @click="testBlock.splice(index, 1)"
-        class="pr-6"
-    >
-        {{ item }}
-    </button>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, provide, inject } from "vue";
+import { ref, onMounted, provide, inject, computed } from "vue";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/Components/ui/select";
 
 import TextBlock from "./Partial/TextBlock.vue";
-
-const textBlock = ref<string[]>([]);
-
-const testBlock = ref<string[]>(["test1", "test2", "test3"]);
 
 const outFrameRef = ref(null);
 
@@ -51,10 +99,28 @@ const frameSize = ref({ width: 0, height: 0 });
 
 const stageRef = ref(null);
 
-const allRef = ref([]);
 const allType = ref([]);
+const allConfig = ref([]);
 
-let index = 0;
+const clickOnText = ref(false);
+const clickOnIndex = ref();
+const selectTextFontType = computed(() => {
+    return clickOnText.value &&
+        allConfig.value[clickOnIndex.value].font !== null
+        ? allConfig.value[clickOnIndex.value].font
+        : "Select a font";
+});
+
+const selectTextColorType = computed(() => {
+    return clickOnText.value &&
+        allConfig.value[clickOnIndex.value].color !== null
+        ? allConfig.value[clickOnIndex.value].color
+        : "Select a color";
+});
+
+const textFontOptions = ref(["Kavivanar", "arial"]);
+
+const textColorOptions = ref(["red", "black"]);
 
 const getFrameSize = () => {
     frameSize.value.width =
@@ -63,24 +129,19 @@ const getFrameSize = () => {
         window.innerHeight > 700 / 0.8 ? window.innerHeight * 0.8 : 700;
 };
 
-const pushRef = (el: any) => {
-    if (!allRef.value.includes(el)) {
-        allRef.value.push(el);
-    }
-};
+// const pushRef = (el: any) => {
+//     if (!allRef.value.includes(el)) {
+//         allRef.value.push(el);
+//     }
+// };
 
 const addTextBlock = () => {
-    textBlock.value.push("text" + index);
-    index++;
-    console.log(index);
     allType.value.push("text");
+    allConfig.value.push({ font: "arial", z: "0", color: "black" });
 };
 
-const deleteTextNode = (index: number) => {
-    console.log(textBlock.value[index]);
-    textBlock.value.splice(index, 1);
-
-    allType.value.splice(index, 1);
+const deleteNode = (index: any) => {
+    allType.value[index] = null;
 };
 
 const init = () => {
