@@ -18,6 +18,12 @@
                                 "
                                 @leave="clickOnText = false"
                             />
+                            <ImageBlock
+                                v-if="allType[index] === 'image'"
+                                :config="allConfig[index]"
+                                @delete-node="deleteNode(index)"
+                                @leave="clickOnText = false"
+                            />
                         </div>
                     </v-layer>
                 </v-stage>
@@ -26,9 +32,26 @@
             <div
                 class="flex min-h-[200px] flex-1 flex-row items-center gap-8 rounded-xl border border-gray-500 px-8"
             >
-                <button class="h-12 rounded border p-2" @click="addTextBlock">
-                    新增文字
-                </button>
+                <div class="flex flex-col gap-2">
+                    <button
+                        class="h-12 rounded border p-2"
+                        @click="addTextBlock"
+                    >
+                        新增文字
+                    </button>
+                    <label
+                        class="flex h-12 items-center justify-center rounded border p-2"
+                    >
+                        新增圖片
+                        <input
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                            @change="addImage"
+                        />
+                    </label>
+                    <!-- <button class="h-12 rounded border p-2">圖層</button> -->
+                </div>
                 <!-- <button class="border">貼圖</button>
                 <button class="border" @click="">測試按鍵</button> -->
                 <div v-if="clickOnText" class="flex w-[200px] flex-col gap-2">
@@ -92,6 +115,7 @@ import {
 } from "@/Components/ui/select";
 
 import TextBlock from "./Partial/TextBlock.vue";
+import ImageBlock from "./Partial/ImageBlock.vue";
 
 const outFrameRef = ref(null);
 
@@ -142,6 +166,25 @@ const addTextBlock = () => {
 
 const deleteNode = (index: any) => {
     allType.value[index] = null;
+};
+
+const addImage = (event: Event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+        const mainImage = new window.Image();
+        const imageUrl = URL.createObjectURL(file);
+        mainImage.src = imageUrl;
+        mainImage.onload = () => {
+            const width = mainImage.width;
+            const height = mainImage.height;
+            allType.value.push("image");
+            allConfig.value.push({
+                mainImage: mainImage,
+                width: 100,
+                height: height / (width / 100),
+            });
+        };
+    }
 };
 
 const init = () => {

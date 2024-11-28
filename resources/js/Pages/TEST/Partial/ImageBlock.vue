@@ -1,7 +1,7 @@
 <template>
     <v-group @mouseenter="mouseIn" @mouseleave="mouseLeave">
-        <v-text
-            ref="textRef"
+        <v-image
+            ref="imageRef"
             :config="combineConfig"
             @dragmove="handleDragMove"
             @click="showEditGroup"
@@ -9,20 +9,10 @@
         <!-- 筆圖示 -->
         <v-group ref="groupRef">
             <v-rect :config="editGroupConfig" />
-            <v-image :config="iconEditConfig" @click="editClick" />
-            <v-image :config="iconCopyConfig" @click="copyClick" />
             <v-image :config="iconDeleteConfig" @click="deleteClick" />
         </v-group>
         <v-transformer ref="transformerRef" />
     </v-group>
-
-    <input
-        ref="inputRef"
-        v-model="textConfig.text"
-        class="absolute border-none border-black p-0 text-[24px] shadow-none ring-0 focus:border-none focus:ring-0"
-        @keyup.enter="finishEditing"
-        :style="inputConfig"
-    />
 </template>
 <script setup lang="ts">
 import { ref, reactive, inject, Ref, onMounted, computed } from "vue";
@@ -31,8 +21,9 @@ import { onClickOutside } from "@vueuse/core";
 interface propsType {}
 
 interface outConfigType {
-    font: string | null;
-    color: string | null;
+    mainImage: any;
+    width: Number;
+    height: Number;
     index: Number;
 }
 
@@ -40,32 +31,28 @@ const props = defineProps<propsType>();
 
 const outConfig = defineModel<outConfigType>("config");
 
-const emits = defineEmits(["deleteNode", "clickOn", "leave"]);
+const emits = defineEmits(["deleteNode", "leave"]);
 
-const textConfig = reactive({
+const imageConfig = reactive({
     x: 50,
     y: 50,
-    text: "test",
-    fontSize: 24,
-    fill: "red",
     draggable: true,
 });
 
 const combineConfig = computed(() => {
     return {
-        x: textConfig.x,
-        y: textConfig.y,
-        text: textConfig.text,
-        fontSize: textConfig.fontSize,
-        draggable: textConfig.draggable,
-        fill: outConfig.value.color,
-        fontFamily: outConfig.value.font,
+        x: imageConfig.x,
+        y: imageConfig.y,
+        draggable: imageConfig.draggable,
+        image: outConfig.value.mainImage,
+        width: outConfig.value.width,
+        height: outConfig.value.height,
     };
 });
 
 const editGroupConfig = reactive({
-    x: textConfig.x - 60,
-    y: textConfig.y - 50,
+    x: imageConfig.x - 60,
+    y: imageConfig.y - 50,
     width: 150,
     height: 40,
     cornerRadius: 20,
@@ -76,8 +63,8 @@ const editGroupConfig = reactive({
 const deleteImage = new window.Image();
 deleteImage.src = "/image/Test/element-delete.svg";
 const iconDeleteConfig = reactive({
-    x: textConfig.x - 50,
-    y: textConfig.y - 40,
+    x: imageConfig.x - 50,
+    y: imageConfig.y - 40,
     radius: 10,
     draggable: false,
     image: deleteImage,
@@ -87,7 +74,7 @@ const copyImage = new window.Image();
 copyImage.src = "/image/Test/element-copy.svg";
 const iconCopyConfig = reactive({
     x: iconDeleteConfig.x + 50,
-    y: textConfig.y - 40,
+    y: imageConfig.y - 40,
     radius: 10,
     draggable: false,
     image: copyImage,
@@ -98,7 +85,7 @@ editImage.src = "/image/Test/element-pencil.svg";
 
 const iconEditConfig = reactive({
     x: iconCopyConfig.x + 50,
-    y: textConfig.y - 40,
+    y: imageConfig.y - 40,
     radius: 10,
     draggable: false,
     image: editImage,
@@ -107,76 +94,36 @@ const iconEditConfig = reactive({
 const isEditing = ref(false);
 
 const groupRef = ref(null);
-const textRef = ref(null);
+const imageRef = ref(null);
 const inputRef = ref(null);
 const transformerRef = ref(null);
-
-const inputConfig = reactive({
-    top: "0",
-    left: "0",
-    width: "0",
-    Position: "absolute",
-});
 
 const stageRef: Ref = inject("stageRef");
 
 function handleDragMove(e: any) {
     showEditGroup();
     const node = e.target;
-    textConfig.x = node.x();
-    textConfig.y = node.y();
-    iconDeleteConfig.x = textConfig.x - 50; // 更新圖示的位置
+    imageConfig.x = node.x();
+    imageConfig.y = node.y();
+    iconDeleteConfig.x = imageConfig.x - 50; // 更新圖示的位置
     iconCopyConfig.x = iconDeleteConfig.x + 50;
     iconEditConfig.x = iconCopyConfig.x + 50;
-    editGroupConfig.x = textConfig.x - 60;
+    editGroupConfig.x = imageConfig.x - 60;
 
     iconEditConfig.y =
         iconCopyConfig.y =
         iconDeleteConfig.y =
-            textConfig.y - 40;
+            imageConfig.y - 40;
 
-    editGroupConfig.y = textConfig.y - 50;
-}
-
-function editClick() {
-    //隱藏
-    groupRef.value.getNode().hide();
-    textRef.value.getNode().hide();
-
-    //抓位置
-    const textPos = textRef.value.getNode().getAbsolutePosition();
-    const stagePos = stageRef.value
-        .getNode()
-        .container()
-        .getBoundingClientRect();
-
-    //setInputStyle
-    const style = {
-        x: stagePos.left + textPos.x,
-        y: stagePos.top + textPos.y,
-        width: textRef.value.getNode().width() + 10,
-    };
-
-    inputConfig.top = style.y + "px";
-    inputConfig.left = style.x + "px";
-    inputConfig.width = "auto";
-
-    document.body.appendChild(inputRef.value);
-    inputRef.value.focus();
-
-    transformerRef.value.getNode().nodes([]);
-
-    setTimeout(() => {
-        isEditing.value = true;
-    }, 100);
+    editGroupConfig.y = imageConfig.y - 50;
 }
 
 function finishEditing() {
     isEditing.value = false;
     groupRef.value.getNode().show();
-    textRef.value.getNode().show();
+    imageRef.value.getNode().show();
     document.body.removeChild(inputRef.value);
-    transformerRef.value.getNode().nodes([textRef.value.getNode()]);
+    transformerRef.value.getNode().nodes([imageRef.value.getNode()]);
 }
 
 onClickOutside(inputRef, (event: any) => {
@@ -189,8 +136,7 @@ const isInside = ref(true);
 
 const showEditGroup = () => {
     groupRef.value.getNode().show();
-    transformerRef.value.getNode().nodes([textRef.value.getNode()]);
-    emits("clickOn");
+    transformerRef.value.getNode().nodes([imageRef.value.getNode()]);
 };
 
 const hideEditGroup = () => {
@@ -207,10 +153,6 @@ const mouseIn = () => {
 const mouseLeave = () => {
     isInside.value = false;
     document.body.addEventListener("click", hideEditGroup);
-};
-
-const copyClick = () => {
-    navigator.clipboard.writeText(textConfig.text);
 };
 
 const deleteClick = () => {
