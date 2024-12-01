@@ -17,6 +17,7 @@
                                     clickOnText = true;
                                 "
                                 @leave="clickOnText = false"
+                                @copy-dom="addTextBlock(20)"
                             />
                             <ImageBlock
                                 v-if="allType[index] === 'image'"
@@ -35,7 +36,7 @@
                 <div class="flex flex-col gap-2">
                     <button
                         class="h-12 rounded border p-2"
-                        @click="addTextBlock"
+                        @click="addTextBlock(0)"
                     >
                         新增文字
                     </button>
@@ -50,53 +51,87 @@
                             @change="addImage"
                         />
                     </label>
-                    <!-- <button class="h-12 rounded border p-2">圖層</button> -->
+
+                    <Drawer>
+                        <DrawerTrigger>
+                            <button class="h-12 w-full rounded border p-2">
+                                圖層
+                            </button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                            <DrawerHeader>
+                                <DrawerTitle>移動圖層</DrawerTitle>
+                                <DrawerDescription
+                                    >自由移動你所選的</DrawerDescription
+                                >
+                            </DrawerHeader>
+                            <DrawerFooter>
+                                <DrawerClose>
+                                    <button
+                                        class="h-12 w-full rounded border p-2"
+                                    >
+                                        離開
+                                    </button>
+                                </DrawerClose>
+                            </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
                 </div>
                 <!-- <button class="border">貼圖</button>
                 <button class="border" @click="">測試按鍵</button> -->
-                <div v-if="clickOnText" class="flex w-[200px] flex-col gap-2">
-                    <Select
-                        @update:modelValue="
-                            (value: string) => {
-                                allConfig[clickOnIndex].font = value;
-                            }
-                        "
-                    >
-                        <SelectTrigger class="w-full">
-                            <SelectValue :placeholder="selectTextFontType" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem
-                                    v-for="font in textFontOptions"
-                                    :value="font"
-                                >
-                                    {{ font }}
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    <Select
-                        @update:modelValue="
-                            (value: string) => {
-                                allConfig[clickOnIndex].color = value;
-                            }
-                        "
-                    >
-                        <SelectTrigger class="w-full">
-                            <SelectValue :placeholder="selectTextColorType" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem
-                                    v-for="color in textColorOptions"
-                                    :value="color"
-                                >
-                                    {{ color }}
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                <div v-if="clickOnText" class="flex w-[300px] flex-col gap-2">
+                    <div class="flex w-[300px] flex-row items-center gap-4">
+                        <div class="w-[100px]">字型</div>
+                        <Select
+                            @update:modelValue="
+                                (value: string) => {
+                                    allConfig[clickOnIndex].fontFamily = value;
+                                }
+                            "
+                        >
+                            <SelectTrigger class="w-full">
+                                <SelectValue
+                                    :placeholder="selectTextFontType"
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem
+                                        v-for="font in textFontOptions"
+                                        :value="font"
+                                    >
+                                        {{ font }}
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div class="flex w-[300px] flex-row items-center gap-4">
+                        <div class="w-[100px]">字體顏色</div>
+                        <Select
+                            @update:modelValue="
+                                (value: string) => {
+                                    allConfig[clickOnIndex].fill = value;
+                                }
+                            "
+                        >
+                            <SelectTrigger class="w-full">
+                                <SelectValue
+                                    :placeholder="selectTextColorType"
+                                />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem
+                                        v-for="color in textColorOptions"
+                                        :value="color"
+                                    >
+                                        {{ color }}
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,6 +148,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/Components/ui/drawer";
 
 import TextBlock from "./Partial/TextBlock.vue";
 import ImageBlock from "./Partial/ImageBlock.vue";
@@ -130,15 +175,15 @@ const clickOnText = ref(false);
 const clickOnIndex = ref();
 const selectTextFontType = computed(() => {
     return clickOnText.value &&
-        allConfig.value[clickOnIndex.value].font !== null
-        ? allConfig.value[clickOnIndex.value].font
+        allConfig.value[clickOnIndex.value].fontFamily !== null
+        ? allConfig.value[clickOnIndex.value].fontFamily
         : "Select a font";
 });
 
 const selectTextColorType = computed(() => {
     return clickOnText.value &&
-        allConfig.value[clickOnIndex.value].color !== null
-        ? allConfig.value[clickOnIndex.value].color
+        allConfig.value[clickOnIndex.value].fill !== null
+        ? allConfig.value[clickOnIndex.value].fill
         : "Select a color";
 });
 
@@ -159,9 +204,18 @@ const getFrameSize = () => {
 //     }
 // };
 
-const addTextBlock = () => {
+const addTextBlock = (offset: number) => {
     allType.value.push("text");
-    allConfig.value.push({ font: "arial", z: "0", color: "black" });
+    allConfig.value.push({
+        fontFamily: "arial",
+        index: allType.value.length + 1,
+        fill: "black",
+        x: 50 + offset,
+        y: 50 + offset,
+        text: "test",
+        fontSize: 24,
+        draggable: true,
+    });
 };
 
 const deleteNode = (index: any) => {

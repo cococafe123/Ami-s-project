@@ -2,7 +2,7 @@
     <v-group @mouseenter="mouseIn" @mouseleave="mouseLeave">
         <v-text
             ref="textRef"
-            :config="combineConfig"
+            :config="outConfig"
             @dragmove="handleDragMove"
             @click="showEditGroup"
         />
@@ -18,7 +18,7 @@
 
     <input
         ref="inputRef"
-        v-model="textConfig.text"
+        v-model="outConfig.text"
         class="absolute border-none border-black p-0 text-[24px] shadow-none ring-0 focus:border-none focus:ring-0"
         @keyup.enter="finishEditing"
         :style="inputConfig"
@@ -31,41 +31,26 @@ import { onClickOutside } from "@vueuse/core";
 interface propsType {}
 
 interface outConfigType {
-    font: string | null;
+    fontFamily: string | null;
     color: string | null;
-    index: Number;
+    index: number;
+    fill: string;
+    x: number;
+    y: number;
+    text: string;
+    fontSize: number;
+    draggable: boolean;
 }
 
 const props = defineProps<propsType>();
 
 const outConfig = defineModel<outConfigType>("config");
 
-const emits = defineEmits(["deleteNode", "clickOn", "leave"]);
-
-const textConfig = reactive({
-    x: 50,
-    y: 50,
-    text: "test",
-    fontSize: 24,
-    fill: "red",
-    draggable: true,
-});
-
-const combineConfig = computed(() => {
-    return {
-        x: textConfig.x,
-        y: textConfig.y,
-        text: textConfig.text,
-        fontSize: textConfig.fontSize,
-        draggable: textConfig.draggable,
-        fill: outConfig.value.color,
-        fontFamily: outConfig.value.font,
-    };
-});
+const emits = defineEmits(["deleteNode", "clickOn", "leave", "copyDom"]);
 
 const editGroupConfig = reactive({
-    x: textConfig.x - 60,
-    y: textConfig.y - 50,
+    x: outConfig.value.x - 60,
+    y: outConfig.value.y - 50,
     width: 150,
     height: 40,
     cornerRadius: 20,
@@ -76,8 +61,8 @@ const editGroupConfig = reactive({
 const deleteImage = new window.Image();
 deleteImage.src = "/image/Test/element-delete.svg";
 const iconDeleteConfig = reactive({
-    x: textConfig.x - 50,
-    y: textConfig.y - 40,
+    x: outConfig.value.x - 50,
+    y: outConfig.value.y - 40,
     radius: 10,
     draggable: false,
     image: deleteImage,
@@ -87,7 +72,7 @@ const copyImage = new window.Image();
 copyImage.src = "/image/Test/element-copy.svg";
 const iconCopyConfig = reactive({
     x: iconDeleteConfig.x + 50,
-    y: textConfig.y - 40,
+    y: outConfig.value.y - 40,
     radius: 10,
     draggable: false,
     image: copyImage,
@@ -98,7 +83,7 @@ editImage.src = "/image/Test/element-pencil.svg";
 
 const iconEditConfig = reactive({
     x: iconCopyConfig.x + 50,
-    y: textConfig.y - 40,
+    y: outConfig.value.y - 40,
     radius: 10,
     draggable: false,
     image: editImage,
@@ -123,19 +108,19 @@ const stageRef: Ref = inject("stageRef");
 function handleDragMove(e: any) {
     showEditGroup();
     const node = e.target;
-    textConfig.x = node.x();
-    textConfig.y = node.y();
-    iconDeleteConfig.x = textConfig.x - 50; // 更新圖示的位置
+    outConfig.value.x = node.x();
+    outConfig.value.y = node.y();
+    iconDeleteConfig.x = outConfig.value.x - 50; // 更新圖示的位置
     iconCopyConfig.x = iconDeleteConfig.x + 50;
     iconEditConfig.x = iconCopyConfig.x + 50;
-    editGroupConfig.x = textConfig.x - 60;
+    editGroupConfig.x = outConfig.value.x - 60;
 
     iconEditConfig.y =
         iconCopyConfig.y =
         iconDeleteConfig.y =
-            textConfig.y - 40;
+            outConfig.value.y - 40;
 
-    editGroupConfig.y = textConfig.y - 50;
+    editGroupConfig.y = outConfig.value.y - 50;
 }
 
 function editClick() {
@@ -210,7 +195,7 @@ const mouseLeave = () => {
 };
 
 const copyClick = () => {
-    navigator.clipboard.writeText(textConfig.text);
+    emits("copyDom");
 };
 
 const deleteClick = () => {
