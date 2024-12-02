@@ -59,21 +59,90 @@
                             </button>
                         </DrawerTrigger>
                         <DrawerContent>
-                            <DrawerHeader>
-                                <DrawerTitle>移動圖層</DrawerTitle>
-                                <DrawerDescription
-                                    >自由移動你所選的</DrawerDescription
-                                >
-                            </DrawerHeader>
-                            <DrawerFooter>
-                                <DrawerClose>
-                                    <button
-                                        class="h-12 w-full rounded border p-2"
+                            <div class="mx-auto w-full max-w-sm">
+                                <DrawerHeader>
+                                    <DrawerTitle>移動圖層</DrawerTitle>
+                                    <DrawerDescription
+                                        >自由移動你所選的</DrawerDescription
                                     >
-                                        離開
-                                    </button>
-                                </DrawerClose>
-                            </DrawerFooter>
+                                </DrawerHeader>
+                                <ScrollArea
+                                    class="h-[250px] w-full rounded border border-gray-400 p-2"
+                                >
+                                    <div
+                                        v-for="(z, index) in allZindex"
+                                        class="w-full"
+                                    >
+                                        <div
+                                            class="flex flex-row justify-between gap-8 px-4 py-2"
+                                        >
+                                            <div
+                                                class="flex flex-row items-center gap-4"
+                                            >
+                                                <div>{{ z }}</div>
+                                                <div>{{ allType[z] }}</div>
+                                            </div>
+                                            <div class="flex flex-row gap-2">
+                                                <button
+                                                    class="size-8"
+                                                    :class="{
+                                                        'opacity-50':
+                                                            index === 0,
+                                                    }"
+                                                    :disabled="index === 0"
+                                                    @click="
+                                                        changeZindexUp(index)
+                                                    "
+                                                >
+                                                    <img
+                                                        :src="
+                                                            asset(
+                                                                'test/element-arrow-up.svg',
+                                                            )
+                                                        "
+                                                    />
+                                                </button>
+                                                <button
+                                                    class="size-8"
+                                                    :class="{
+                                                        'opacity-50':
+                                                            index ===
+                                                            allZindex.length -
+                                                                1,
+                                                    }"
+                                                    :disabled="
+                                                        index ===
+                                                        allZindex.length - 1
+                                                    "
+                                                    @click="
+                                                        changeZindexDown(index)
+                                                    "
+                                                >
+                                                    <img
+                                                        :src="
+                                                            asset(
+                                                                'test/element-arrow-down.svg',
+                                                            )
+                                                        "
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <Separator
+                                            v-if="index !== allZindex.length"
+                                        />
+                                    </div>
+                                </ScrollArea>
+                                <DrawerFooter>
+                                    <DrawerClose>
+                                        <button
+                                            class="h-12 w-full rounded border p-2"
+                                        >
+                                            離開
+                                        </button>
+                                    </DrawerClose>
+                                </DrawerFooter>
+                            </div>
                         </DrawerContent>
                     </Drawer>
                 </div>
@@ -159,8 +228,12 @@ import {
     DrawerTrigger,
 } from "@/Components/ui/drawer";
 
-import TextBlock from "./Partial/TextBlock.vue";
-import ImageBlock from "./Partial/ImageBlock.vue";
+import { ScrollArea } from "@/Components/ui/scroll-area";
+import { Separator } from "@/Components/ui/separator";
+
+import TextBlock from "./Partials/TextBlock.vue";
+import ImageBlock from "./Partials/ImageBlock.vue";
+import asset from "@/asset";
 
 const outFrameRef = ref(null);
 
@@ -170,6 +243,7 @@ const stageRef = ref(null);
 
 const allType = ref([]);
 const allConfig = ref([]);
+const allZindex = ref([]);
 
 const clickOnText = ref(false);
 const clickOnIndex = ref();
@@ -205,6 +279,7 @@ const getFrameSize = () => {
 // };
 
 const addTextBlock = (offset: number) => {
+    allZindex.value.push(allType.value.length);
     allType.value.push("text");
     allConfig.value.push({
         fontFamily: "arial",
@@ -220,6 +295,7 @@ const addTextBlock = (offset: number) => {
 
 const deleteNode = (index: any) => {
     allType.value[index] = null;
+    allZindex.value = allZindex.value.filter((element) => element != index);
 };
 
 const addImage = (event: Event) => {
@@ -231,14 +307,51 @@ const addImage = (event: Event) => {
         mainImage.onload = () => {
             const width = mainImage.width;
             const height = mainImage.height;
+            allZindex.value.push(allType.value.length);
             allType.value.push("image");
             allConfig.value.push({
                 mainImage: mainImage,
                 width: 100,
                 height: height / (width / 100),
+                index: allType.value.length + 1,
             });
         };
     }
+};
+
+const changeZindexUp = (index: number) => {
+    [allZindex.value[index], allZindex.value[index - 1]] = [
+        allZindex.value[index - 1],
+        allZindex.value[index],
+    ];
+
+    const idx1 = allZindex.value[index];
+    const idx2 = allZindex.value[index - 1];
+
+    [allConfig.value[idx1].index, allConfig.value[idx2].index] = [
+        allConfig.value[idx2].index,
+        allConfig.value[idx1].index,
+    ];
+
+    console.log(
+        allConfig.value[allZindex.value[index]].index,
+        allConfig.value[allZindex.value[index - 1]].index,
+    );
+};
+
+const changeZindexDown = (index: number) => {
+    [allZindex.value[index], allZindex.value[index + 1]] = [
+        allZindex.value[index + 1],
+        allZindex.value[index],
+    ];
+
+    const idx1 = allZindex.value[index];
+    const idx2 = allZindex.value[index + 1];
+
+    [allConfig.value[idx1].index, allConfig.value[idx2].index] = [
+        allConfig.value[idx2].index,
+        allConfig.value[idx1].index,
+    ];
 };
 
 const init = () => {
