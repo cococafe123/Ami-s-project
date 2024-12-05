@@ -230,6 +230,7 @@ import {
 
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Separator } from "@/Components/ui/separator";
+import { cloneDeep } from "lodash";
 
 import TextBlock from "./Partials/TextBlock.vue";
 import ImageBlock from "./Partials/ImageBlock.vue";
@@ -283,7 +284,7 @@ const addTextBlock = (offset: number) => {
     allType.value.push("text");
     allConfig.value.push({
         fontFamily: "arial",
-        index: allType.value.length + 1,
+        zIndex: allType.value.length + 1,
         fill: "black",
         x: 50 + offset,
         y: 50 + offset,
@@ -320,31 +321,26 @@ const addImage = (event: Event) => {
 };
 
 const changeZindexUp = (index: number) => {
-    [allZindex.value[index], allZindex.value[index - 1]] = [
-        allZindex.value[index - 1],
-        allZindex.value[index],
-    ];
+    const idx1 = cloneDeep(allConfig.value[allZindex.value[index]].index);
+    const idx2 = cloneDeep(allConfig.value[allZindex.value[index - 1]].index);
 
-    const idx1 = allZindex.value[index];
-    const idx2 = allZindex.value[index - 1];
+    console.log(idx1, idx2);
 
-    [allConfig.value[idx1].index, allConfig.value[idx2].index] = [
-        allConfig.value[idx2].index,
-        allConfig.value[idx1].index,
-    ];
+    allConfig.value[allZindex.value[index]].index = cloneDeep(idx2);
+    allConfig.value[allZindex.value[index - 1]].index = cloneDeep(idx1);
 
     console.log(
         allConfig.value[allZindex.value[index]].index,
         allConfig.value[allZindex.value[index - 1]].index,
     );
+
+    [allZindex.value[index], allZindex.value[index - 1]] = [
+        allZindex.value[index - 1],
+        allZindex.value[index],
+    ];
 };
 
 const changeZindexDown = (index: number) => {
-    [allZindex.value[index], allZindex.value[index + 1]] = [
-        allZindex.value[index + 1],
-        allZindex.value[index],
-    ];
-
     const idx1 = allZindex.value[index];
     const idx2 = allZindex.value[index + 1];
 
@@ -352,6 +348,16 @@ const changeZindexDown = (index: number) => {
         allConfig.value[idx2].index,
         allConfig.value[idx1].index,
     ];
+
+    [allZindex.value[index], allZindex.value[index + 1]] = [
+        allZindex.value[index + 1],
+        allZindex.value[index],
+    ];
+
+    console.log(
+        allConfig.value[allZindex.value[index]].index,
+        allConfig.value[allZindex.value[index + 1]].index,
+    );
 };
 
 const init = () => {

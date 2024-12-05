@@ -33,7 +33,7 @@ interface propsType {}
 interface outConfigType {
     fontFamily: string | null;
     color: string | null;
-    index: number;
+    zIndex: number;
     fill: string;
     x: number;
     y: number;

@@ -24,7 +24,7 @@ interface outConfigType {
     mainImage: any;
     width: Number;
     height: Number;
-    index: Number;
+    zIndex: Number;
 }
 
 const props = defineProps<propsType>();
