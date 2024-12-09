@@ -41,8 +41,8 @@ cd Ami-s-project
 
 ### 切換分支
 
-web-各式RWD網頁及konva.js測試
-card-線上名片網站
+- web-各式RWD網頁及konva.js測試
+- card-線上名片網站
 
 ```bash
 git checkout 分支名稱
