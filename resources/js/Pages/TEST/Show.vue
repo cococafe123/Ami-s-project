@@ -17,7 +17,7 @@
                                     clickOnText = true;
                                 "
                                 @leave="clickOnText = false"
-                                @copy-dom="addTextBlock(20)"
+                                @copy-dom="copyTextBlock(index)"
                             />
                             <ImageBlock
                                 v-if="allType[index] === 'image'"
@@ -36,7 +36,7 @@
                 <div class="flex flex-col gap-2">
                     <button
                         class="h-12 rounded border p-2"
-                        @click="addTextBlock(0)"
+                        @click="addTextBlock()"
                     >
                         新增文字
                     </button>
@@ -279,19 +279,28 @@ const getFrameSize = () => {
 //     }
 // };
 
-const addTextBlock = (offset: number) => {
+const addTextBlock = () => {
     allZindex.value.push(allType.value.length);
     allType.value.push("text");
     allConfig.value.push({
         fontFamily: "arial",
         zIndex: allType.value.length + 1,
         fill: "black",
-        x: 50 + offset,
-        y: 50 + offset,
+        x: 50,
+        y: 50,
         text: "test",
         fontSize: 24,
         draggable: true,
     });
+};
+
+const copyTextBlock = (index: number) => {
+    allZindex.value.push(allType.value.length);
+    allType.value.push("text");
+    allConfig.value.push(cloneDeep(allConfig.value[index]));
+    let config = allConfig.value[allConfig.value.length - 1];
+    config.x = config.x + 20;
+    config.y = config.y + 20;
 };
 
 const deleteNode = (index: any) => {
