@@ -2,30 +2,30 @@
 
 ## 目前已有網頁技能
 
-熟練HTML/JS/CSS
-熟練Bootstrap/Shadcn-vue/Quasar
-熟練Tailwind css3
-熟悉Vue.js(Vue3主要、Vue2僅維護過)
-熟悉Vue Router、Pinia
-熟練RESTful API
-接觸並寫過Laravel
-使用過MySQL
-使用過Konva.js
-使用過Bootstrap-vue
-使用Figma切版
+- 熟練HTML/JS/CSS
+- 熟練Bootstrap/Shadcn-vue/Quasar
+- 熟練Tailwind css3
+- 熟悉Vue.js(Vue3主要、Vue2僅維護過)
+- 熟悉Vue Router、Pinia
+- 熟練RESTful API
+- 接觸並寫過Laravel
+- 使用過MySQL
+- 使用過Konva.js
+- 使用過Bootstrap-vue
+- 使用Figma切版
 
 ## 其他非網頁技能
 
-熟悉Unity/C#
-接觸過UNREAL4/5
-寫過Shader/OpenGL
-使用LrC
+- 熟悉Unity/C#
+- 接觸過UNREAL4/5
+- 寫過Shader/OpenGL
+- 使用LrC
 
 ## 安裝教學
 
 以下將會引導你如何安裝此專案到你的電腦上。
 
-Node.js 版本建議為：16.15.0 以上...
+Node.js 版本建議為：20.12.1 以上...
 
 ### 取得專案
 
@@ -103,4 +103,3 @@ DB_DATABASE=CardCity #資料庫Name
 ```bash
 https://codecity.com.tw/ #codecity官網
 ```
-
