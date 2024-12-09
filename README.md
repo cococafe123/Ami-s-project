@@ -91,7 +91,7 @@ http://127.0.0.1:8000/
 ## 環境變數說明
 
 ```env
-DB_CONNECTION=mysql  # 資料庫方式
+DB_CONNECTION=mysql  #資料庫方式
 DB_HOST=127.0.0.1    #資料庫IP
 DB_PORT=3306         #資料庫Port
 DB_DATABASE=CardCity #資料庫Name
