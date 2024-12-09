@@ -8,6 +8,7 @@
 - 熟悉Vue.js(Vue3主要、Vue2僅維護過)
 - 熟悉Vue Router、Pinia
 - 熟練RESTful API
+- 接觸並寫過TS
 - 接觸並寫過Laravel
 - 使用過SASS/SCSS
 - 使用過MySQL
