@@ -9,6 +9,7 @@
 - 熟悉Vue Router、Pinia
 - 熟練RESTful API
 - 接觸並寫過Laravel
+- 使用過SASS/SCSS
 - 使用過MySQL
 - 使用過Konva.js
 - 使用過Bootstrap-vue
