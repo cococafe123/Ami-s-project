@@ -14,6 +14,7 @@
 - 使用過MySQL
 - 使用過Konva.js
 - 使用過Bootstrap-vue
+- 使用過d3.js
 - 使用Figma切版
 
 ## 其他非網頁技能
