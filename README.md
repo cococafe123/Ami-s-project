@@ -29,7 +29,14 @@
 
 以下將會引導你如何安裝此專案到你的電腦上。
 
-Node.js 版本建議為：20.12.1 以上...
+- Node.js 版本建議為：20.12.1 以上...
+- Composer 版本建議為：2.8.4 以上...
+- php 版本建議為：8.4 以上...
+
+- php
+- node.js/npm
+- composer
+- MySQL
 
 ### 取得專案
 
@@ -73,6 +80,12 @@ php artisan key:generate
 
 ```bash
 php artisan storage:link
+```
+
+### 生成資料庫
+
+``` bash
+php artisan migrate
 ```
 
 ### 運行專案
