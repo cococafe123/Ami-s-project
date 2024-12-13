@@ -33,11 +33,6 @@
 - Composer 版本建議為：2.8.4 以上...
 - php 版本建議為：8.4 以上...
 
-- php
-- node.js/npm
-- composer
-- MySQL
-
 ### 取得專案
 
 ```bash
