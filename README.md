@@ -3,7 +3,7 @@
 ## 目前已有網頁技能
 
 ### UI/UX
-- 使用過Figma出版設計
+- 使用過Figma初版設計
 ### 前端
 #### Vue
 - 熟練Vue.js(Vue3主要、Vue2僅維護過)
@@ -27,6 +27,14 @@
 - 熟悉asp.net
 - 使用過HyperX/VM/K8s
 - 簡易操作nginx/IIS
+
+### 開發專案經驗
+- codecity-官網
+- codecity-citybot
+- codecity-數位名片網站
+- hciot-lrp(維護)
+- hciot-lrp(vue+laravel 開發中)
+- hciot-床頭卡
 
 ## 其他非網頁技能
 
