@@ -33,6 +33,8 @@
 - codecity-citybot(前端)
 - codecity-數位名片網站(全端)
 - hciot-lrp(全端-維護)
+  長照全人評估介接
+  組件化元件
 - hciot-lrp-new(全端開發中)
 - hciot-床頭卡(全端+uiux)
 
