@@ -32,8 +32,8 @@
 - codecity-官網(全端)
 - codecity-citybot(前端)
 - codecity-數位名片網站(全端)
-- hciot-lrp(維護-全端)
-- hciot-lrp(vue+laravel 全端開發中)
+- hciot-lrp(全端-維護)
+- hciot-lrp-new(全端開發中)
 - hciot-床頭卡(全端+uiux)
 
 ## 其他非網頁技能
