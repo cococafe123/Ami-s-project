@@ -2,21 +2,31 @@
 
 ## 目前已有網頁技能
 
-- 熟練HTML/JS/CSS
-- 熟練Bootstrap/Shadcn-vue/Quasar
-- 熟練Tailwind css3
-- 熟悉Vue.js(Vue3主要、Vue2僅維護過)
+### UI/UX
+- 使用過Figma出版設計
+### 前端
+#### Vue
+- 熟練Vue.js(Vue3主要、Vue2僅維護過)
+- 熟練Tailwind css(v3、v4)
 - 熟悉Vue Router、Pinia
-- 熟練RESTful API
-- 接觸並寫過TS
-- 接觸並寫過Laravel
-- 使用過SASS/SCSS
-- 使用過MySQL
+- 熟悉Reka-ui/shadcn-vue/tanstack-table
+- 熟悉axios
+#### 其他
+- 熟練HTML/JS/TS/CSS
+- 熟悉Bootstrap/Quasar
+- 熟練jQuery
+- 熟悉Razor
 - 使用過Konva.js
-- 使用過Bootstrap-vue
+- 熟練RESTful API
+- 使用過SASS/SCSS
 - 使用過d3.js
+### 後端
+- 熟悉Laravel
+- 熟悉Express/Node.js
+- 熟悉MySQL/MSSQL
+- 熟悉asp.net
 - 使用過HyperX/VM/K8s
-- 使用Figma切版
+- 簡易操作nginx/IIS
 
 ## 其他非網頁技能
 
